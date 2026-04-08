@@ -456,12 +456,27 @@
         
         <!-- TAB: PRESUPUESTOS -->
         <div id="budgets" class="tab-content">
-            <div class="form-section">
-                <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1.5rem;">Editar Presupuestos</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                <!-- Presupuestos Compartidos -->
+                <div class="form-section">
+                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Presupuestos Compartidos</h2>
+                    <div id="budgetEditsShared"></div>
+                    <button class="button primary" style="width: 100%; margin-top: 1rem;" onclick="saveBudgets()">Guardar</button>
+                </div>
                 
-                <div id="budgetEdits"></div>
+                <!-- Presupuestos Anto -->
+                <div class="form-section">
+                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Presupuestos Anto</h2>
+                    <div id="budgetEditsAnto"></div>
+                    <button class="button primary" style="width: 100%; margin-top: 1rem;" onclick="saveBudgets()">Guardar</button>
+                </div>
                 
-                <button class="button primary" style="width: 100%; margin-top: 1rem;" onclick="saveBudgets()">Guardar Presupuestos</button>
+                <!-- Presupuestos Fer -->
+                <div class="form-section">
+                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Presupuestos Fer</h2>
+                    <div id="budgetEditsFer"></div>
+                    <button class="button primary" style="width: 100%; margin-top: 1rem;" onclick="saveBudgets()">Guardar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -676,21 +691,37 @@
             container.innerHTML = html || '<p style="color: #6b7280;">Sin presupuestos configurados</p>';
         }
         
+        // Categorías para presupuestos individuales
+        const individualBudgetCategories = ['Social', 'Deporte', 'Peluquería', 'Streaming / Suscripciones', 'Transporte público', 'Psicólogo', 'Salud', 'Ropa', 'Supermercado', 'Varios', 'Taxis'];
+        const sharedBudgetCategories = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Viajes', 'Limpieza', 'Internet + Celulares', 'Gas'];
+        
         // Editar presupuestos
         function renderBudgetEdits() {
-            const container = document.getElementById('budgetEdits');
-            let html = '';
+            const sharedContainer = document.getElementById('budgetEditsShared');
+            const antoContainer = document.getElementById('budgetEditsAnto');
+            const ferContainer = document.getElementById('budgetEditsFer');
+            
+            let sharedHtml = '';
+            let antoFerHtml = '';
             
             for (const [subcat, budget] of Object.entries(budgets)) {
-                html += `
+                const inputHtml = `
                     <div class="form-group">
                         <label>${subcat}</label>
                         <input type="number" class="budget-input" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
                     </div>
                 `;
+                
+                if (sharedBudgetCategories.includes(subcat)) {
+                    sharedHtml += inputHtml;
+                } else if (individualBudgetCategories.includes(subcat)) {
+                    antoFerHtml += inputHtml;
+                }
             }
             
-            container.innerHTML = html;
+            sharedContainer.innerHTML = sharedHtml || '<p style="color: #6b7280;">Sin presupuestos compartidos</p>';
+            antoContainer.innerHTML = antoFerHtml || '<p style="color: #6b7280;">Sin presupuestos</p>';
+            ferContainer.innerHTML = antoFerHtml || '<p style="color: #6b7280;">Sin presupuestos</p>';
         }
         
         function saveBudgets() {
