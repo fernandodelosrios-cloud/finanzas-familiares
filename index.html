@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor de Finanzas Familiares</title>
+    <title>Wealth Management 71427321893</title>
     <style>
         * {
             margin: 0;
@@ -13,8 +13,8 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f9fafb;
-            color: #1f2937;
+            background: #fafaf8;
+            color: #3a3a35;
         }
         
         .container {
@@ -31,6 +31,7 @@
             font-size: 24px;
             font-weight: 500;
             margin-bottom: 0.5rem;
+            color: #556b2f;
         }
         
         .header-actions {
@@ -59,8 +60,8 @@
         }
         
         .tab-btn.active {
-            color: #1f2937;
-            border-bottom-color: #1f2937;
+            color: #556b2f;
+            border-bottom-color: #556b2f;
         }
         
         .tab-content {
@@ -143,9 +144,9 @@
         }
         
         .button.primary {
-            background: #1f2937;
+            background: #556b2f;
             color: white;
-            border-color: #1f2937;
+            border-color: #556b2f;
         }
         
         .button.primary:hover {
@@ -206,9 +207,13 @@
         
         .budget-progress-bar {
             height: 100%;
-            background: #1f2937;
+            background: #5ca61d;
             border-radius: 4px;
             transition: width 0.3s;
+        }
+        
+        .budget-progress-bar.over-budget {
+            background: #d32f2f;
         }
         
         .budget-stats {
@@ -320,7 +325,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Gestor de Finanzas Familiares</h1>
+            <h1>Wealth Management 71427321893</h1>
             <p style="color: #6b7280; font-size: 14px; margin: 0;">Abril 2026</p>
             <div class="header-actions">
                 <button class="button secondary" onclick="exportToCSV()">📥 Descargar CSV</button>
@@ -488,30 +493,46 @@
             'Gastos variables': ['Deporte', 'Peluquería', 'Psicólogo', 'Ropa', 'Salud', 'Social', 'Streaming / Suscripciones', 'Transporte público', 'Varios', 'Supermercado', 'Taxis', 'Viajes']
         };
         
-        const sharedCategories = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Viajes', 'Taxis', 'Supermercado', 'Limpieza', 'Internet + Celulares', 'Gas'];
+        const sharedBudgetCategories = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Viajes', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis'];
+        const individualBudgetCategories = ['Social', 'Deporte', 'Peluquería', 'Streaming / Suscripciones', 'Transporte público', 'Psicólogo', 'Salud', 'Ropa', 'Varios'];
         
         // Estado
         let expenses = [];
-        let budgets = {
+        let budgetsShared = {
             'Agua': 50,
             'Alquiler': 1500,
             'Atlas y Ares': 200,
             'Equipamiento casa': 100,
             'Luz': 80,
             'Viajes': 300,
-            'Taxis': 150,
-            'Supermercado': 400,
             'Limpieza': 100,
             'Internet + Celulares': 80,
             'Gas': 50,
+            'Supermercado': 400,
+            'Taxis': 150
+        };
+        
+        let budgetsAnto = {
+            'Social': 250,
             'Deporte': 200,
             'Peluquería': 80,
-            'Psicólogo': 120,
-            'Ropa': 200,
-            'Salud': 150,
-            'Social': 250,
             'Streaming / Suscripciones': 50,
             'Transporte público': 100,
+            'Psicólogo': 120,
+            'Salud': 150,
+            'Ropa': 200,
+            'Varios': 100
+        };
+        
+        let budgetsFer = {
+            'Social': 250,
+            'Deporte': 200,
+            'Peluquería': 80,
+            'Streaming / Suscripciones': 50,
+            'Transporte público': 100,
+            'Psicólogo': 120,
+            'Salud': 150,
+            'Ropa': 200,
             'Varios': 100
         };
         
@@ -528,12 +549,14 @@
             if (stored) {
                 const data = JSON.parse(stored);
                 expenses = data.expenses || [];
-                budgets = data.budgets || budgets;
+                budgetsShared = data.budgetsShared || budgetsShared;
+                budgetsAnto = data.budgetsAnto || budgetsAnto;
+                budgetsFer = data.budgetsFer || budgetsFer;
             }
         }
         
         function saveToStorage() {
-            localStorage.setItem('finanzasData', JSON.stringify({ expenses, budgets }));
+            localStorage.setItem('finanzasData', JSON.stringify({ expenses, budgetsShared, budgetsAnto, budgetsFer }));
         }
         
         // Actualizar subcategorías
@@ -626,34 +649,28 @@
         // Dashboard
         function updateDashboard() {
             const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
-            const totalBudget = Object.values(budgets).reduce((sum, b) => sum + b, 0);
+            const totalBudgetShared = Object.values(budgetsShared).reduce((sum, b) => sum + b, 0);
+            const totalBudgetAnto = Object.values(budgetsAnto).reduce((sum, b) => sum + b, 0);
+            const totalBudgetFer = Object.values(budgetsFer).reduce((sum, b) => sum + b, 0);
+            const totalBudget = totalBudgetShared + totalBudgetAnto + totalBudgetFer;
             const remaining = totalBudget - totalSpent;
             
             document.getElementById('totalSpent').textContent = '$' + totalSpent.toFixed(2);
             document.getElementById('totalBudget').textContent = '$' + totalBudget.toFixed(2);
             document.getElementById('remaining').textContent = '$' + remaining.toFixed(2);
             
-            renderBudgetSection('sharedBudget', 'Compartido');
-            renderBudgetSection('antoBudget', 'Anto');
-            renderBudgetSection('ferBudget', 'Fer');
+            renderBudgetSection('sharedBudget', 'Compartido', budgetsShared);
+            renderBudgetSection('antoBudget', 'Anto', budgetsAnto);
+            renderBudgetSection('ferBudget', 'Fer', budgetsFer);
             
             renderRecentExpenses();
         }
         
-        function renderBudgetSection(elementId, person) {
+        function renderBudgetSection(elementId, person, budgetObj) {
             const container = document.getElementById(elementId);
             let html = '';
             
-            for (const [subcat, budget] of Object.entries(budgets)) {
-                let isRelevant = false;
-                if (person === 'Compartido') {
-                    isRelevant = sharedCategories.includes(subcat);
-                } else {
-                    isRelevant = !sharedCategories.includes(subcat);
-                }
-                
-                if (!isRelevant) continue;
-                
+            for (const [subcat, budget] of Object.entries(budgetObj)) {
                 let spent = 0;
                 expenses.forEach(exp => {
                     if (exp.subcategory !== subcat) return;
@@ -673,12 +690,14 @@
                 
                 const percentage = Math.min((spent / budget) * 100, 100);
                 const remaining = budget - spent;
+                const isOverBudget = spent > budget;
+                const barClass = isOverBudget ? 'budget-progress-bar over-budget' : 'budget-progress-bar';
                 
                 html += `
                     <div class="budget-item">
                         <div class="budget-item-name">${subcat}</div>
                         <div class="budget-progress">
-                            <div class="budget-progress-bar" style="width: ${percentage}%"></div>
+                            <div class="${barClass}" style="width: ${Math.min(percentage, 100)}%"></div>
                         </div>
                         <div class="budget-stats">
                             <span>$${spent.toFixed(2)} / $${budget.toFixed(2)}</span>
@@ -691,10 +710,6 @@
             container.innerHTML = html || '<p style="color: #6b7280;">Sin presupuestos configurados</p>';
         }
         
-        // Categorías para presupuestos individuales
-        const individualBudgetCategories = ['Social', 'Deporte', 'Peluquería', 'Streaming / Suscripciones', 'Transporte público', 'Psicólogo', 'Salud', 'Ropa', 'Supermercado', 'Varios', 'Taxis'];
-        const sharedBudgetCategories = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Viajes', 'Limpieza', 'Internet + Celulares', 'Gas'];
-        
         // Editar presupuestos
         function renderBudgetEdits() {
             const sharedContainer = document.getElementById('budgetEditsShared');
@@ -702,33 +717,57 @@
             const ferContainer = document.getElementById('budgetEditsFer');
             
             let sharedHtml = '';
-            let antoFerHtml = '';
+            let antoHtml = '';
+            let ferHtml = '';
             
-            for (const [subcat, budget] of Object.entries(budgets)) {
-                const inputHtml = `
+            for (const [subcat, budget] of Object.entries(budgetsShared)) {
+                sharedHtml += `
                     <div class="form-group">
                         <label>${subcat}</label>
-                        <input type="number" class="budget-input" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                        <input type="number" class="budget-input-shared" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
                     </div>
                 `;
-                
-                if (sharedBudgetCategories.includes(subcat)) {
-                    sharedHtml += inputHtml;
-                } else if (individualBudgetCategories.includes(subcat)) {
-                    antoFerHtml += inputHtml;
-                }
+            }
+            
+            for (const [subcat, budget] of Object.entries(budgetsAnto)) {
+                antoHtml += `
+                    <div class="form-group">
+                        <label>${subcat}</label>
+                        <input type="number" class="budget-input-anto" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                    </div>
+                `;
+            }
+            
+            for (const [subcat, budget] of Object.entries(budgetsFer)) {
+                ferHtml += `
+                    <div class="form-group">
+                        <label>${subcat}</label>
+                        <input type="number" class="budget-input-fer" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                    </div>
+                `;
             }
             
             sharedContainer.innerHTML = sharedHtml || '<p style="color: #6b7280;">Sin presupuestos compartidos</p>';
-            antoContainer.innerHTML = antoFerHtml || '<p style="color: #6b7280;">Sin presupuestos</p>';
-            ferContainer.innerHTML = antoFerHtml || '<p style="color: #6b7280;">Sin presupuestos</p>';
+            antoContainer.innerHTML = antoHtml || '<p style="color: #6b7280;">Sin presupuestos</p>';
+            ferContainer.innerHTML = ferHtml || '<p style="color: #6b7280;">Sin presupuestos</p>';
         }
         
         function saveBudgets() {
-            document.querySelectorAll('.budget-input').forEach(input => {
+            document.querySelectorAll('.budget-input-shared').forEach(input => {
                 const subcat = input.dataset.subcat;
-                budgets[subcat] = parseFloat(input.value) || 0;
+                budgetsShared[subcat] = parseFloat(input.value) || 0;
             });
+            
+            document.querySelectorAll('.budget-input-anto').forEach(input => {
+                const subcat = input.dataset.subcat;
+                budgetsAnto[subcat] = parseFloat(input.value) || 0;
+            });
+            
+            document.querySelectorAll('.budget-input-fer').forEach(input => {
+                const subcat = input.dataset.subcat;
+                budgetsFer[subcat] = parseFloat(input.value) || 0;
+            });
+            
             saveToStorage();
             updateDashboard();
             showSuccess('Presupuestos actualizados');
