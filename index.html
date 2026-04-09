@@ -432,6 +432,18 @@
                             <div class="stat-value" id="totalSpent">$0.00</div>
                         </div>
                         <div class="stat-card">
+                            <div class="stat-label">Presupuesto Compartido</div>
+                            <div class="stat-value" id="budgetSharedTotal">$0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Presupuesto Anto</div>
+                            <div class="stat-value" id="budgetAntoTotal">$0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Presupuesto Fer</div>
+                            <div class="stat-value" id="budgetFerTotal">$0.00</div>
+                        </div>
+                        <div class="stat-card">
                             <div class="stat-label">Presupuesto Total</div>
                             <div class="stat-value" id="totalBudget">$0.00</div>
                         </div>
@@ -493,9 +505,6 @@
             'Gastos variables': ['Deporte', 'Peluquería', 'Psicólogo', 'Ropa', 'Salud', 'Social', 'Streaming / Suscripciones', 'Transporte público', 'Varios', 'Supermercado', 'Taxis', 'Viajes']
         };
         
-        const sharedBudgetCategories = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Viajes', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis'];
-        const individualBudgetCategories = ['Social', 'Deporte', 'Peluquería', 'Streaming / Suscripciones', 'Transporte público', 'Psicólogo', 'Salud', 'Ropa', 'Varios'];
-        
         // Estado
         let expenses = [];
         let budgetsShared = {
@@ -536,27 +545,31 @@
             'Varios': 100
         };
         
-        // Inicializar
-        function init() {
-            loadFromStorage();
-            renderBudgetEdits();
-            updateDashboard();
-        }
-        
-        // Storage
+        // Storage - DEBE IR ANTES DE INIT
         function loadFromStorage() {
             const stored = localStorage.getItem('finanzasData');
             if (stored) {
-                const data = JSON.parse(stored);
-                expenses = data.expenses || [];
-                budgetsShared = data.budgetsShared || budgetsShared;
-                budgetsAnto = data.budgetsAnto || budgetsAnto;
-                budgetsFer = data.budgetsFer || budgetsFer;
+                try {
+                    const data = JSON.parse(stored);
+                    if (data.expenses) expenses = data.expenses;
+                    if (data.budgetsShared) budgetsShared = data.budgetsShared;
+                    if (data.budgetsAnto) budgetsAnto = data.budgetsAnto;
+                    if (data.budgetsFer) budgetsFer = data.budgetsFer;
+                } catch (e) {
+                    console.error('Error loading from storage:', e);
+                }
             }
         }
         
         function saveToStorage() {
             localStorage.setItem('finanzasData', JSON.stringify({ expenses, budgetsShared, budgetsAnto, budgetsFer }));
+        }
+        
+        // Inicializar
+        function init() {
+            loadFromStorage();
+            renderBudgetEdits();
+            updateDashboard();
         }
         
         // Actualizar subcategorías
@@ -656,6 +669,9 @@
             const remaining = totalBudget - totalSpent;
             
             document.getElementById('totalSpent').textContent = '$' + totalSpent.toFixed(2);
+            document.getElementById('budgetSharedTotal').textContent = '$' + totalBudgetShared.toFixed(2);
+            document.getElementById('budgetAntoTotal').textContent = '$' + totalBudgetAnto.toFixed(2);
+            document.getElementById('budgetFerTotal').textContent = '$' + totalBudgetFer.toFixed(2);
             document.getElementById('totalBudget').textContent = '$' + totalBudget.toFixed(2);
             document.getElementById('remaining').textContent = '$' + remaining.toFixed(2);
             
