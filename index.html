@@ -23,15 +23,190 @@
             padding: 1rem;
         }
         
+        /* LOGIN SCREEN */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #556b2f 0%, #6b8e23 100%);
+        }
+        
+        .login-box {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .login-box h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #556b2f;
+            text-align: center;
+        }
+        
+        .login-box p {
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 14px;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #3a3a35;
+        }
+        
+        .form-group input {
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #556b2f;
+        }
+        
+        .button {
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .button.primary {
+            background: #556b2f;
+            color: white;
+            width: 100%;
+        }
+        
+        .button.primary:hover {
+            background: #475a1f;
+        }
+        
+        .button.secondary {
+            background: transparent;
+            color: #556b2f;
+            border: 1px solid #556b2f;
+            width: 100%;
+        }
+        
+        .toggle-auth {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .toggle-auth button {
+            background: none;
+            border: none;
+            color: #556b2f;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+        
+        .error-msg {
+            background: #fee;
+            color: #c33;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .error-msg.active {
+            display: block;
+        }
+        
+        .success-msg {
+            background: #efe;
+            color: #3c3;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 13px;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .success-msg.active {
+            opacity: 1;
+        }
+        
+        /* APP SCREEN */
+        .app-screen {
+            display: none;
+        }
+        
+        .app-screen.active {
+            display: block;
+        }
+        
         .header {
             margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .header h1 {
             font-size: 24px;
             font-weight: 500;
-            margin-bottom: 0.5rem;
             color: #556b2f;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-email {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: #556b2f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
+        .logout-btn:hover {
+            background: #475a1f;
         }
         
         .header-actions {
@@ -80,6 +255,13 @@
             margin-bottom: 1.5rem;
         }
         
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
         .form-group {
             margin-bottom: 1.25rem;
         }
@@ -89,7 +271,7 @@
             font-size: 14px;
             font-weight: 500;
             margin-bottom: 0.5rem;
-            color: #1f2937;
+            color: #3a3a35;
         }
         
         .form-group input,
@@ -103,21 +285,17 @@
             font-family: inherit;
         }
         
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #556b2f;
+            box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.1);
         }
         
         .radio-group {
             display: flex;
-            gap: 1rem;
-            margin-top: 0.5rem;
+            gap: 1.5rem;
         }
         
         .radio-group label {
@@ -125,42 +303,17 @@
             align-items: center;
             gap: 0.5rem;
             margin: 0;
-            font-weight: 400;
-        }
-        
-        .button {
-            padding: 0.75rem 1.5rem;
-            background: #f3f4f6;
-            border: 0.5px solid #d1d5db;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
+            font-weight: normal;
         }
         
-        .button:hover {
-            background: #e5e7eb;
-        }
-        
-        .button.primary {
-            background: #556b2f;
-            color: white;
-            border-color: #556b2f;
-        }
-        
-        .button.primary:hover {
-            opacity: 0.9;
-        }
-        
-        .button.secondary {
-            background: #f3f4f6;
-            border: 0.5px solid #d1d5db;
+        .radio-group input[type="radio"] {
+            width: auto;
+            cursor: pointer;
         }
         
         .dashboard {
             display: grid;
-            grid-template-columns: 1fr;
             gap: 1.5rem;
         }
         
@@ -173,32 +326,55 @@
         
         .card-title {
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
+            color: #3a3a35;
             margin-bottom: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .stat-card {
+            background: #fafaf8;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 0.5px solid #e5e7eb;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #556b2f;
         }
         
         .budget-section {
-            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
         
         .budget-item {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            align-items: center;
-            padding: 0.75rem;
-            background: #f9fafb;
-            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
         
         .budget-item-name {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
+            color: #3a3a35;
         }
         
         .budget-progress {
-            position: relative;
             height: 8px;
             background: #e5e7eb;
             border-radius: 4px;
@@ -219,39 +395,14 @@
         .budget-stats {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
-            color: #6b7280;
-        }
-        
-        .stat-card {
-            background: #f9fafb;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        .stat-label {
             font-size: 12px;
             color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-value {
-            font-size: 20px;
-            font-weight: 500;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
         }
         
         .expense-list {
-            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
         
         .expense-item {
@@ -259,48 +410,48 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.75rem;
-            border-bottom: 0.5px solid #e5e7eb;
-            font-size: 14px;
+            background: #fafaf8;
+            border-radius: 8px;
+            border: 0.5px solid #e5e7eb;
+            font-size: 13px;
         }
         
-        .expense-item:last-child {
-            border-bottom: none;
-        }
-        
-        .expense-info {
+        .expense-description {
             flex: 1;
         }
         
-        .expense-category {
-            font-size: 13px;
-            color: #6b7280;
-        }
-        
         .expense-amount {
-            font-weight: 500;
+            font-weight: 600;
+            color: #556b2f;
         }
         
         .expense-badge {
-            display: inline-block;
-            font-size: 11px;
+            background: #e5e7eb;
             padding: 0.25rem 0.5rem;
-            background: #f3f4f6;
-            border-radius: 3px;
+            border-radius: 4px;
+            font-size: 11px;
             margin-left: 0.5rem;
         }
         
-        .success-msg {
-            display: none;
-            padding: 1rem;
-            background: #dcfce7;
-            border: 0.5px solid #86efac;
-            border-radius: 8px;
-            color: #166534;
-            margin-bottom: 1rem;
+        .budget-edits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
         }
         
-        .success-msg.active {
-            display: block;
+        .budget-edit-section h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #3a3a35;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            color: #6b7280;
         }
         
         @media (max-width: 768px) {
@@ -312,200 +463,266 @@
                 grid-template-columns: 1fr;
             }
             
-            .budget-item {
-                grid-template-columns: 1fr;
-            }
-            
-            .header-actions {
+            .header {
                 flex-direction: column;
+                gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Wealth Management 71427321893</h1>
-            <p style="color: #6b7280; font-size: 14px; margin: 0;">Abril 2026</p>
-            <div class="header-actions">
-                <button class="button secondary" onclick="exportToCSV()">📥 Descargar CSV</button>
-                <button class="button secondary" onclick="exportToGoogleSheets()">📊 Exportar a Google Sheets</button>
-            </div>
-        </div>
-        
-        <div class="success-msg" id="successMsg"></div>
-        
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('expenses')">Registrar Gasto</button>
-            <button class="tab-btn" onclick="switchTab('dashboard')">Dashboard</button>
-            <button class="tab-btn" onclick="switchTab('budgets')">Presupuestos</button>
-        </div>
-        
-        <!-- TAB: REGISTRAR GASTO -->
-        <div id="expenses" class="tab-content active">
-            <div class="form-section">
-                <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1.5rem;">Nuevo Gasto</h2>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-screen active">
+        <div class="login-box">
+            <h1>Wealth Management</h1>
+            <p>Sincroniza tus finanzas en todos los dispositivos</p>
+            
+            <div class="error-msg" id="errorMsg"></div>
+            
+            <div id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="loginEmail" placeholder="tu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="button" class="button primary" onclick="handleLogin()">Inicia sesión</button>
                 
-                <form id="expenseForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Responsable *</label>
-                            <select id="responsible" required>
-                                <option value="">Selecciona</option>
-                                <option value="Anto">Anto</option>
-                                <option value="Fer">Fer</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Categoría *</label>
-                            <select id="category" required onchange="updateSubcategories()">
-                                <option value="">Selecciona</option>
-                                <option value="Gastos fijos">Gastos fijos</option>
-                                <option value="Gastos variables">Gastos variables</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Subcategoría *</label>
-                        <select id="subcategory" required>
-                            <option value="">Selecciona una categoría primero</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Descripción</label>
-                        <textarea id="description" placeholder="Ej: Mercado en Carrefour"></textarea>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Monto ($) *</label>
-                            <input type="number" id="amount" required min="0" step="0.01" placeholder="0.00">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Medio de pago *</label>
-                            <select id="paymentMethod" required>
-                                <option value="">Selecciona</option>
-                                <option value="Tarjeta de crédito">Tarjeta de crédito</option>
-                                <option value="Bizum/Transferencia">Bizum/Transferencia</option>
-                                <option value="Efectivo">Efectivo</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>¿Gasto compartido? *</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="isShared" value="Si" onchange="updateParticipation()"> Sí</label>
-                            <label><input type="radio" name="isShared" value="No" onchange="updateParticipation()"> No</label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Participación *</label>
-                        <div class="radio-group" id="participationGroup">
-                            <p style="color: #6b7280; font-size: 13px;">Selecciona si es compartido primero</p>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="button primary" style="width: 100%; margin-top: 1rem;">Registrar Gasto</button>
-                </form>
+                <div class="toggle-auth">
+                    ¿No tienes cuenta? <button onclick="toggleAuthForm()">Regístrate aquí</button>
+                </div>
             </div>
             
-            <div class="form-section">
-                <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 1rem;">Últimos gastos registrados</h3>
-                <div id="recentExpenses" class="expense-list"></div>
-            </div>
-        </div>
-        
-        <!-- TAB: DASHBOARD -->
-        <div id="dashboard" class="tab-content">
-            <div class="dashboard">
-                <div class="dashboard-card">
-                    <div class="card-title">Resumen General</div>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-label">Total Gastado</div>
-                            <div class="stat-value" id="totalSpent">$0.00</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Presupuesto Compartido</div>
-                            <div class="stat-value" id="budgetSharedTotal">$0.00</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Presupuesto Anto</div>
-                            <div class="stat-value" id="budgetAntoTotal">$0.00</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Presupuesto Fer</div>
-                            <div class="stat-value" id="budgetFerTotal">$0.00</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Presupuesto Total</div>
-                            <div class="stat-value" id="totalBudget">$0.00</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Disponible</div>
-                            <div class="stat-value" id="remaining">$0.00</div>
-                        </div>
-                    </div>
+            <div id="registerForm" class="login-form" style="display: none;">
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="registerEmail" placeholder="tu@email.com" required>
                 </div>
+                <div class="form-group">
+                    <label>Contraseña (mínimo 6 caracteres)</label>
+                    <input type="password" id="registerPassword" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar contraseña</label>
+                    <input type="password" id="registerConfirm" placeholder="••••••••" required>
+                </div>
+                <button type="button" class="button primary" onclick="handleRegister()">Crear cuenta</button>
                 
-                <div class="dashboard-card">
-                    <div class="card-title">Gastos Compartidos</div>
-                    <div id="sharedBudget" class="budget-section"></div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <div class="card-title">Gastos de Anto</div>
-                    <div id="antoBudget" class="budget-section"></div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <div class="card-title">Gastos de Fer</div>
-                    <div id="ferBudget" class="budget-section"></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- TAB: PRESUPUESTOS -->
-        <div id="budgets" class="tab-content">
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
-                <!-- Presupuestos Compartidos -->
-                <div class="form-section">
-                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Presupuestos Compartidos</h2>
-                    <div id="budgetEditsShared"></div>
-                    <button class="button primary" style="width: 100%; margin-top: 1rem;" onclick="saveBudgets()">Guardar</button>
-                </div>
-                
-                <!-- Presupuestos Anto -->
-                <div class="form-section">
-                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Presupuestos Anto</h2>
-                    <div id="budgetEditsAnto"></div>
-                    <button class="button primary" style="width: 100%; margin-top: 1rem;" onclick="saveBudgets()">Guardar</button>
-                </div>
-                
-                <!-- Presupuestos Fer -->
-                <div class="form-section">
-                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Presupuestos Fer</h2>
-                    <div id="budgetEditsFer"></div>
-                    <button class="button primary" style="width: 100%; margin-top: 1rem;" onclick="saveBudgets()">Guardar</button>
+                <div class="toggle-auth">
+                    ¿Ya tienes cuenta? <button onclick="toggleAuthForm()">Inicia sesión</button>
                 </div>
             </div>
         </div>
     </div>
     
+    <!-- APP SCREEN -->
+    <div id="appScreen" class="app-screen">
+        <div class="container">
+            <div class="header">
+                <h1>Wealth Management 71427321893</h1>
+                <div class="user-info">
+                    <span class="user-email" id="userEmail"></span>
+                    <button class="logout-btn" onclick="handleLogout()">Cerrar sesión</button>
+                </div>
+            </div>
+            
+            <div class="success-msg" id="successMsg"></div>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('expenses')">Registrar Gasto</button>
+                <button class="tab-btn" onclick="switchTab('dashboard')">Dashboard</button>
+                <button class="tab-btn" onclick="switchTab('budgets')">Presupuestos</button>
+            </div>
+            
+            <!-- TAB: REGISTRAR GASTO -->
+            <div id="expenses" class="tab-content active">
+                <div class="form-section">
+                    <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1.5rem;">Nuevo Gasto</h2>
+                    
+                    <form id="expenseForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Responsable *</label>
+                                <select id="responsible" required>
+                                    <option value="">Selecciona</option>
+                                    <option value="Anto">Anto</option>
+                                    <option value="Fer">Fer</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Categoría *</label>
+                                <select id="category" required onchange="updateSubcategories()">
+                                    <option value="">Selecciona</option>
+                                    <option value="Gastos fijos">Gastos fijos</option>
+                                    <option value="Gastos variables">Gastos variables</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Subcategoría *</label>
+                                <select id="subcategory" required>
+                                    <option value="">Selecciona categoría primero</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Monto ($) *</label>
+                                <input type="number" id="amount" required min="0" step="0.01" placeholder="0.00">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Fecha *</label>
+                                <input type="date" id="date" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Medio de pago</label>
+                                <select id="paymentMethod">
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Tarjeta">Tarjeta</option>
+                                    <option value="Transferencia">Transferencia</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Descripción</label>
+                            <textarea id="description" placeholder="Detalles del gasto..." style="min-height: 80px; resize: vertical;"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>¿Gasto compartido? *</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="isShared" value="Si" onchange="updateParticipation()"> Sí</label>
+                                <label><input type="radio" name="isShared" value="No" onchange="updateParticipation()"> No</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Participación *</label>
+                            <div class="radio-group" id="participationGroup">
+                                <p style="color: #6b7280; font-size: 13px;">Selecciona si es compartido primero</p>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="button primary" style="width: 100%; margin-top: 1rem;">Registrar Gasto</button>
+                    </form>
+                </div>
+                
+                <div class="form-section">
+                    <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 1rem;">Últimos gastos registrados</h3>
+                    <div id="recentExpenses" class="expense-list"></div>
+                </div>
+            </div>
+            
+            <!-- TAB: DASHBOARD -->
+            <div id="dashboard" class="tab-content">
+                <div class="dashboard">
+                    <div class="dashboard-card">
+                        <div class="card-title">Resumen General</div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Gastado</div>
+                                <div class="stat-value" id="totalSpent">$0.00</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Presupuesto Compartido</div>
+                                <div class="stat-value" id="budgetSharedTotal">$0.00</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Presupuesto Anto</div>
+                                <div class="stat-value" id="budgetAntoTotal">$0.00</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Presupuesto Fer</div>
+                                <div class="stat-value" id="budgetFerTotal">$0.00</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Presupuesto Total</div>
+                                <div class="stat-value" id="totalBudget">$0.00</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Disponible</div>
+                                <div class="stat-value" id="remaining">$0.00</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-title">Gastos Compartidos</div>
+                        <div id="sharedBudget" class="budget-section"></div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-title">Gastos de Anto</div>
+                        <div id="antoBudget" class="budget-section"></div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-title">Gastos de Fer</div>
+                        <div id="ferBudget" class="budget-section"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- TAB: PRESUPUESTOS -->
+            <div id="budgets" class="tab-content">
+                <div class="form-section">
+                    <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1.5rem;">Editar Presupuestos</h2>
+                    
+                    <div class="budget-edits">
+                        <div class="budget-edit-section">
+                            <h3>Presupuestos Compartidos</h3>
+                            <div id="budgetEditsShared"></div>
+                        </div>
+                        
+                        <div class="budget-edit-section">
+                            <h3>Presupuestos de Anto</h3>
+                            <div id="budgetEditsAnto"></div>
+                        </div>
+                        
+                        <div class="budget-edit-section">
+                            <h3>Presupuestos de Fer</h3>
+                            <div id="budgetEditsFer"></div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="button primary" style="margin-top: 2rem;" onclick="saveBudgets()">Guardar Presupuestos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+    
     <script>
-        // Categorización
-        const categories = {
-            'Gastos fijos': ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'],
-            'Gastos variables': ['Deporte', 'Peluquería', 'Psicólogo', 'Ropa', 'Salud', 'Social', 'Streaming / Suscripciones', 'Transporte público', 'Varios', 'Supermercado', 'Taxis', 'Viajes']
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCu-nRuS0q2E9s9tWifszonu pcDb2VfV00",
+            authDomain: "finanzas-familiares-5bda7.firebaseapp.com",
+            projectId: "finanzas-familiares-5bda7",
+            storageBucket: "finanzas-familiares-5bda7.firebasestorage.app",
+            messagingSenderId: "823800796884",
+            appId: "1:823800796884:web:bbc1a019470f6b40c58d41"
         };
         
-        // Estado
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // State
+        let currentUser = null;
         let expenses = [];
         let budgetsShared = {
             'Agua': 50,
@@ -545,121 +762,199 @@
             'Varios': 100
         };
         
-        // Storage - DEBE IR ANTES DE INIT
-        function loadFromStorage() {
-            const stored = localStorage.getItem('finanzasData');
-            if (stored) {
-                try {
-                    const data = JSON.parse(stored);
-                    if (data.expenses) expenses = data.expenses;
-                    if (data.budgetsShared) budgetsShared = data.budgetsShared;
-                    if (data.budgetsAnto) budgetsAnto = data.budgetsAnto;
-                    if (data.budgetsFer) budgetsFer = data.budgetsFer;
-                } catch (e) {
-                    console.error('Error loading from storage:', e);
-                }
+        const categoriesData = {
+            'Gastos fijos': ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'],
+            'Gastos variables': ['Deporte', 'Peluquería', 'Psicólogo', 'Ropa', 'Salud', 'Social', 'Streaming / Suscripciones', 'Transporte público', 'Varios', 'Supermercado', 'Taxis', 'Viajes']
+        };
+        
+        // Auth State Observer
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginScreen').classList.remove('active');
+                document.getElementById('appScreen').classList.add('active');
+                document.getElementById('userEmail').textContent = user.email;
+                
+                // Load user data from Firestore
+                loadUserData();
+                setupRealtimeListener();
+            } else {
+                currentUser = null;
+                document.getElementById('loginScreen').classList.add('active');
+                document.getElementById('appScreen').classList.remove('active');
             }
+        });
+        
+        // Authentication Functions
+        function toggleAuthForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            loginForm.style.display = loginForm.style.display === 'none' ? 'flex' : 'none';
+            registerForm.style.display = registerForm.style.display === 'none' ? 'flex' : 'none';
         }
         
-        function saveToStorage() {
-            localStorage.setItem('finanzasData', JSON.stringify({ expenses, budgetsShared, budgetsAnto, budgetsFer }));
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                showError('Por favor completa todos los campos');
+                return;
+            }
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .catch((error) => showError(error.message));
         }
         
-        // Inicializar
-        function init() {
-            loadFromStorage();
-            renderBudgetEdits();
+        function handleRegister() {
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirm = document.getElementById('registerConfirm').value;
+            
+            if (!email || !password || !confirm) {
+                showError('Por favor completa todos los campos');
+                return;
+            }
+            
+            if (password !== confirm) {
+                showError('Las contraseñas no coinciden');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    showSuccess('Cuenta creada exitosamente');
+                    setTimeout(() => {
+                        document.getElementById('registerForm').style.display = 'none';
+                        document.getElementById('loginForm').style.display = 'flex';
+                    }, 1500);
+                })
+                .catch((error) => showError(error.message));
+        }
+        
+        function handleLogout() {
+            auth.signOut();
+        }
+        
+        // Firestore Functions
+        function loadUserData() {
+            db.collection('users').doc(currentUser.uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        expenses = data.expenses || [];
+                        budgetsShared = data.budgetsShared || budgetsShared;
+                        budgetsAnto = data.budgetsAnto || budgetsAnto;
+                        budgetsFer = data.budgetsFer || budgetsFer;
+                    }
+                    updateDashboard();
+                    renderBudgetEdits();
+                    document.getElementById('expenseForm').addEventListener('submit', handleAddExpense);
+                    setDefaultDate();
+                });
+        }
+        
+        function setupRealtimeListener() {
+            db.collection('users').doc(currentUser.uid).onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    expenses = data.expenses || [];
+                    budgetsShared = data.budgetsShared || budgetsShared;
+                    budgetsAnto = data.budgetsAnto || budgetsAnto;
+                    budgetsFer = data.budgetsFer || budgetsFer;
+                    updateDashboard();
+                }
+            });
+        }
+        
+        function saveUserData() {
+            if (!currentUser) return;
+            
+            db.collection('users').doc(currentUser.uid).set({
+                expenses: expenses,
+                budgetsShared: budgetsShared,
+                budgetsAnto: budgetsAnto,
+                budgetsFer: budgetsFer,
+                lastUpdated: new Date()
+            }, { merge: true });
+        }
+        
+        // Expense Functions
+        function handleAddExpense(e) {
+            e.preventDefault();
+            
+            const expense = {
+                id: Date.now().toString(),
+                responsible: document.getElementById('responsible').value,
+                category: document.getElementById('category').value,
+                subcategory: document.getElementById('subcategory').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                date: document.getElementById('date').value,
+                paymentMethod: document.getElementById('paymentMethod').value,
+                description: document.getElementById('description').value,
+                isShared: document.querySelector('input[name="isShared"]:checked').value,
+                participation: document.querySelector('input[name="participation"]:checked')?.value || '50-50'
+            };
+            
+            expenses.push(expense);
+            saveUserData();
+            
+            document.getElementById('expenseForm').reset();
+            setDefaultDate();
+            showSuccess('Gasto registrado correctamente');
             updateDashboard();
         }
         
-        // Actualizar subcategorías
         function updateSubcategories() {
             const category = document.getElementById('category').value;
             const subcatSelect = document.getElementById('subcategory');
-            subcatSelect.innerHTML = '<option value="">Selecciona</option>';
             
-            if (category && categories[category]) {
-                categories[category].forEach(sub => {
-                    const option = document.createElement('option');
-                    option.value = sub;
-                    option.textContent = sub;
-                    subcatSelect.appendChild(option);
-                });
+            subcatSelect.innerHTML = '';
+            
+            if (!category) {
+                subcatSelect.innerHTML = '<option value="">Selecciona categoría primero</option>';
+                return;
             }
+            
+            const subcats = categoriesData[category] || [];
+            subcats.forEach(subcat => {
+                const option = document.createElement('option');
+                option.value = subcat;
+                option.textContent = subcat;
+                subcatSelect.appendChild(option);
+            });
         }
         
-        // Actualizar participación
         function updateParticipation() {
             const isShared = document.querySelector('input[name="isShared"]:checked')?.value;
-            const group = document.getElementById('participationGroup');
+            const participationGroup = document.getElementById('participationGroup');
             
-            group.innerHTML = '';
+            participationGroup.innerHTML = '';
+            
             if (isShared === 'Si') {
-                group.innerHTML = `
+                participationGroup.innerHTML = `
                     <label><input type="radio" name="participation" value="50-50" checked> 50-50</label>
                     <label><input type="radio" name="participation" value="Anto 100%"> Anto 100%</label>
                     <label><input type="radio" name="participation" value="Fer 100%"> Fer 100%</label>
                 `;
             } else if (isShared === 'No') {
-                group.innerHTML = `
-                    <label><input type="radio" name="participation" value="Anto 100%" checked> Anto 100%</label>
-                    <label><input type="radio" name="participation" value="Fer 100%"> Fer 100%</label>
+                participationGroup.innerHTML = `
+                    <label><input type="radio" name="participation" value="Individual" checked> Individual</label>
                 `;
             }
         }
         
-        // Registrar gasto
-        document.getElementById('expenseForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const expense = {
-                id: Date.now(),
-                responsible: document.getElementById('responsible').value,
-                category: document.getElementById('category').value,
-                subcategory: document.getElementById('subcategory').value,
-                description: document.getElementById('description').value,
-                amount: parseFloat(document.getElementById('amount').value),
-                paymentMethod: document.getElementById('paymentMethod').value,
-                isShared: document.querySelector('input[name="isShared"]:checked')?.value,
-                participation: document.querySelector('input[name="participation"]:checked')?.value,
-                date: new Date().toLocaleDateString('es-ES')
-            };
-            
-            expenses.push(expense);
-            saveToStorage();
-            
-            document.getElementById('expenseForm').reset();
-            updateDashboard();
-            renderRecentExpenses();
-            
-            showSuccess('Gasto registrado correctamente');
-        });
-        
-        // Renderizar gastos recientes
-        function renderRecentExpenses() {
-            const recent = expenses.slice(-5).reverse();
-            const container = document.getElementById('recentExpenses');
-            
-            if (recent.length === 0) {
-                container.innerHTML = '<p style="color: #6b7280; font-size: 14px;">No hay gastos registrados aún</p>';
-                return;
-            }
-            
-            container.innerHTML = recent.map(exp => `
-                <div class="expense-item">
-                    <div class="expense-info">
-                        <div><strong>${exp.subcategory}</strong></div>
-                        <div class="expense-category">${exp.responsible} • ${exp.date}</div>
-                    </div>
-                    <div>
-                        <span class="expense-amount">$${exp.amount.toFixed(2)}</span>
-                        <span class="expense-badge">${exp.participation}</span>
-                    </div>
-                </div>
-            `).join('');
+        function setDefaultDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
         }
         
-        // Dashboard
+        // Dashboard Functions
         function updateDashboard() {
             const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
             const totalBudgetShared = Object.values(budgetsShared).reduce((sum, b) => sum + b, 0);
@@ -726,7 +1021,30 @@
             container.innerHTML = html || '<p style="color: #6b7280;">Sin presupuestos configurados</p>';
         }
         
-        // Editar presupuestos
+        function renderRecentExpenses() {
+            const container = document.getElementById('recentExpenses');
+            const recent = expenses.slice(-5).reverse();
+            
+            if (recent.length === 0) {
+                container.innerHTML = '<p style="color: #6b7280;">No hay gastos registrados</p>';
+                return;
+            }
+            
+            container.innerHTML = recent.map(exp => `
+                <div class="expense-item">
+                    <div class="expense-description">
+                        <div style="font-weight: 500;">${exp.subcategory}</div>
+                        <div style="color: #6b7280; font-size: 12px;">${exp.date} • ${exp.responsible}</div>
+                    </div>
+                    <div>
+                        <span class="expense-amount">$${exp.amount.toFixed(2)}</span>
+                        <span class="expense-badge">${exp.participation}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Budget Functions
         function renderBudgetEdits() {
             const sharedContainer = document.getElementById('budgetEditsShared');
             const antoContainer = document.getElementById('budgetEditsAnto');
@@ -784,80 +1102,12 @@
                 budgetsFer[subcat] = parseFloat(input.value) || 0;
             });
             
-            saveToStorage();
+            saveUserData();
             updateDashboard();
             showSuccess('Presupuestos actualizados');
         }
         
-        // Exportar a CSV
-        function exportToCSV() {
-            const headers = ['Fecha', 'Responsable', 'Categoría', 'Subcategoría', 'Descripción', 'Monto', '¿Compartido?', 'Participación', 'Medio de pago'];
-            const rows = expenses.map(exp => [
-                exp.date,
-                exp.responsible,
-                exp.category,
-                exp.subcategory,
-                exp.description,
-                exp.amount.toFixed(2),
-                exp.isShared,
-                exp.participation,
-                exp.paymentMethod
-            ]);
-            
-            let csv = headers.join(',') + '\n';
-            rows.forEach(row => {
-                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `gastos-familiares-${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-            
-            showSuccess('CSV descargado correctamente');
-        }
-        
-        // Exportar a Google Sheets
-        function exportToGoogleSheets() {
-            const sheetUrl = 'https://docs.google.com/spreadsheets/d/1n5R6mcFc5kmiYTHIQ3SyA1HyhTJLUlvaF1Z5co7pwOA/edit?usp=sharing';
-            
-            const instructions = `
-📋 Pasos para copiar los datos a Google Sheets:
-
-1. Descarga el CSV con el botón "Descargar CSV"
-2. Abre tu Google Sheets: 
-   ${sheetUrl}
-
-3. Crea una hoja nueva llamada "Gastos" (si no existe)
-
-4. En la hoja "Gastos", haz clic en "Archivo" > "Importar" > "Subir archivo"
-
-5. Selecciona el CSV descargado
-
-6. Elige "Reemplazar hoja" o "Insertar nuevas filas"
-
-7. ¡Listo! Tus datos están sincronizados
-
-Puedes repetir este proceso cada vez que quieras actualizar el Sheets.
-            `;
-            
-            alert(instructions);
-            showSuccess('Instrucciones mostradas. Primero descarga el CSV.');
-        }
-        
-        function showSuccess(msg) {
-            const successDiv = document.getElementById('successMsg');
-            successDiv.textContent = '✓ ' + msg;
-            successDiv.classList.add('active');
-            setTimeout(() => successDiv.classList.remove('active'), 3000);
-        }
-        
-        // Cambiar tab
+        // UI Functions
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -866,8 +1116,19 @@ Puedes repetir este proceso cada vez que quieras actualizar el Sheets.
             event.target.classList.add('active');
         }
         
-        // Iniciar
-        init();
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+            setTimeout(() => errorDiv.classList.remove('active'), 3000);
+        }
+        
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMsg');
+            successDiv.textContent = '✓ ' + message;
+            successDiv.classList.add('active');
+            setTimeout(() => successDiv.classList.remove('active'), 3000);
+        }
     </script>
 </body>
 </html>
