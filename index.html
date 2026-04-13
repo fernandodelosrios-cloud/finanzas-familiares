@@ -729,6 +729,14 @@
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
             .catch((error) => console.error('Persistence error:', error));
         
+        // Utility Functions
+        function formatCurrency(value) {
+            return '$' + parseFloat(value).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        
         // State
         let currentUser = null;
         let expenses = [];
@@ -1002,12 +1010,12 @@
             const totalBudget = totalBudgetShared + totalBudgetAnto + totalBudgetFer;
             const remaining = totalBudget - totalSpent;
             
-            document.getElementById('totalSpent').textContent = '$' + totalSpent.toFixed(2);
-            document.getElementById('budgetSharedTotal').textContent = '$' + totalBudgetShared.toFixed(2);
-            document.getElementById('budgetAntoTotal').textContent = '$' + totalBudgetAnto.toFixed(2);
-            document.getElementById('budgetFerTotal').textContent = '$' + totalBudgetFer.toFixed(2);
-            document.getElementById('totalBudget').textContent = '$' + totalBudget.toFixed(2);
-            document.getElementById('remaining').textContent = '$' + remaining.toFixed(2);
+            document.getElementById('totalSpent').textContent = formatCurrency(totalSpent);
+            document.getElementById('budgetSharedTotal').textContent = formatCurrency(totalBudgetShared);
+            document.getElementById('budgetAntoTotal').textContent = formatCurrency(totalBudgetAnto);
+            document.getElementById('budgetFerTotal').textContent = formatCurrency(totalBudgetFer);
+            document.getElementById('totalBudget').textContent = formatCurrency(totalBudget);
+            document.getElementById('remaining').textContent = formatCurrency(remaining);
             
             renderBudgetSection('sharedBudget', 'Compartido', budgetsShared);
             renderBudgetSection('antoBudget', 'Anto', budgetsAnto);
@@ -1050,8 +1058,8 @@
                             <div class="${barClass}" style="width: ${Math.min(percentage, 100)}%"></div>
                         </div>
                         <div class="budget-stats">
-                            <span>$${spent.toFixed(2)} / $${budget.toFixed(2)}</span>
-                            <span>${Math.max(0, remaining).toFixed(2)} disponible</span>
+                            <span>${formatCurrency(spent)} / ${formatCurrency(budget)}</span>
+                            <span>${formatCurrency(Math.max(0, remaining))} disponible</span>
                         </div>
                     </div>
                 `;
@@ -1076,7 +1084,7 @@
                         <div style="color: #6b7280; font-size: 12px;">${exp.date} • ${exp.responsible}</div>
                     </div>
                     <div>
-                        <span class="expense-amount">$${exp.amount.toFixed(2)}</span>
+                        <span class="expense-amount">${formatCurrency(exp.amount)}</span>
                         <span class="expense-badge">${exp.participation}</span>
                     </div>
                 </div>
