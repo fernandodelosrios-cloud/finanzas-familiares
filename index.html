@@ -721,6 +721,10 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         
+        // Asegurar persistencia de sesión
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+            .catch((error) => console.error('Persistence error:', error));
+        
         // State
         let currentUser = null;
         let expenses = [];
@@ -803,7 +807,24 @@
             }
             
             auth.signInWithEmailAndPassword(email, password)
-                .catch((error) => showError(error.message));
+                .then((userCredential) => {
+                    console.log('Login exitoso:', userCredential.user.email);
+                    showSuccess('Bienvenido ' + userCredential.user.email);
+                })
+                .catch((error) => {
+                    console.error('Error de login:', error.code, error.message);
+                    let mensaje = 'Error al iniciar sesión';
+                    
+                    if (error.code === 'auth/user-not-found') {
+                        mensaje = 'Usuario no encontrado';
+                    } else if (error.code === 'auth/wrong-password') {
+                        mensaje = 'Contraseña incorrecta';
+                    } else if (error.code === 'auth/invalid-email') {
+                        mensaje = 'Email inválido';
+                    }
+                    
+                    showError(mensaje);
+                });
         }
         
         function handleRegister() {
