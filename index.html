@@ -25,11 +25,15 @@
         
         /* LOGIN SCREEN */
         .login-screen {
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #556b2f 0%, #6b8e23 100%);
+        }
+        
+        .login-screen.active {
+            display: flex;
         }
         
         .login-box {
@@ -773,19 +777,33 @@
         
         // Auth State Observer
         auth.onAuthStateChanged((user) => {
+            console.log('Auth state changed:', user ? user.email : 'no user');
+            
+            const loginScreen = document.getElementById('loginScreen');
+            const appScreen = document.getElementById('appScreen');
+            
             if (user) {
                 currentUser = user;
-                document.getElementById('loginScreen').classList.remove('active');
-                document.getElementById('appScreen').classList.add('active');
+                console.log('Showing app screen for:', user.email);
+                
+                // Mostrar app, ocultar login
+                loginScreen.classList.remove('active');
+                appScreen.classList.add('active');
+                
                 document.getElementById('userEmail').textContent = user.email;
                 
-                // Load user data from Firestore
-                loadUserData();
-                setupRealtimeListener();
+                // Pequeño delay para asegurar que el DOM está listo
+                setTimeout(() => {
+                    loadUserData();
+                    setupRealtimeListener();
+                }, 500);
             } else {
                 currentUser = null;
-                document.getElementById('loginScreen').classList.add('active');
-                document.getElementById('appScreen').classList.remove('active');
+                console.log('Showing login screen');
+                
+                // Mostrar login, ocultar app
+                loginScreen.classList.add('active');
+                appScreen.classList.remove('active');
             }
         });
         
