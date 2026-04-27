@@ -1054,7 +1054,6 @@ Sé específico con números y categorías.`;
             'Atlas y Ares': 200,
             'Equipamiento casa': 100,
             'Luz': 80,
-            'Viajes': 300,
             'Limpieza': 100,
             'Internet + Celulares': 80,
             'Gas': 50,
@@ -1210,15 +1209,17 @@ Sé específico con números y categorías.`;
                         budgetsFer = { ...budgetsFer, ...data.budgetsFer };
                     }
                     
-                    // Asegurar que Viajes existe en todos los presupuestos
-                    if (!budgetsShared.hasOwnProperty('Viajes')) {
-                        budgetsShared['Viajes'] = 300;
-                    }
+                    // Asegurar que Viajes existe SOLO en Anto y Fer
                     if (!budgetsAnto.hasOwnProperty('Viajes')) {
                         budgetsAnto['Viajes'] = 300;
                     }
                     if (!budgetsFer.hasOwnProperty('Viajes')) {
                         budgetsFer['Viajes'] = 300;
+                    }
+                    
+                    // Remover Viajes de compartido si existe
+                    if (budgetsShared.hasOwnProperty('Viajes')) {
+                        delete budgetsShared['Viajes'];
                     }
                     
                     // Guardar la migración si fue necesaria
@@ -1527,7 +1528,7 @@ Sé específico con números y categorías.`;
                     if (exp.subcategory !== subcat) return;
                     
                     if (person === 'Compartido') {
-                        // Solo gastos compartidos para la sección compartida
+                        // Para gastos compartidos: mostrar 100% del gasto en dashboard
                         if (exp.isShared === 'Si') {
                             spent += exp.amount;
                         }
