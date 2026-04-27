@@ -801,9 +801,35 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         
+        // Variables globales
+        let currentUser = null;
+        let firebaseReady = false;
+        
+        console.log('🔥 Firebase inicializándose...');
+        
         // Asegurar persistencia de sesión
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-            .catch((error) => console.error('Persistence error:', error));
+            .then(() => {
+                console.log('✅ Persistencia configurada');
+                firebaseReady = true;
+            })
+            .catch((error) => console.error('❌ Persistence error:', error));
+        
+        // Escuchar cambios de autenticación
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                firebaseReady = true;
+                console.log('🔐 Usuario logueado:', user.email);
+                console.log('UID:', user.uid);
+                loadUserData();
+                showAppContent();
+            } else {
+                currentUser = null;
+                console.log('👤 No hay usuario logueado');
+                showLoginForm();
+            }
+        });
         
         // Utility Functions
         function formatCurrency(value) {
@@ -1046,7 +1072,6 @@ Sé específico con números y categorías.`;
         }
         
         // State
-        let currentUser = null;
         let expenses = [];
         let budgetsShared = {
             'Agua': 50,
@@ -1232,20 +1257,25 @@ Sé específico con números y categorías.`;
         
         function saveUserData() {
             if (!currentUser) {
-                console.error('Error: No hay usuario logueado');
+                console.error('❌ Error: No hay usuario logueado');
+                showError('Error: No hay usuario logueado');
                 return;
             }
             
             console.log('📤 Intentando guardar datos en Firebase...');
+            console.log('Usuario actual:', currentUser.uid);
             console.log('Gastos a guardar:', expenses.length);
             
-            db.collection('users').doc(currentUser.uid).set({
+            const userData = {
                 expenses: expenses,
                 budgetsShared: budgetsShared,
                 budgetsAnto: budgetsAnto,
                 budgetsFer: budgetsFer,
-                lastUpdated: new Date()
-            }, { merge: true })
+                lastUpdated: new Date(),
+                userEmail: currentUser.email
+            };
+            
+            db.collection('users').doc(currentUser.uid).set(userData, { merge: true })
             .then(() => {
                 console.log('✅ Datos guardados exitosamente en Firebase');
                 console.log('Total de gastos guardados:', expenses.length);
@@ -1254,6 +1284,7 @@ Sé específico con números y categorías.`;
                 console.error('❌ Error al guardar en Firebase:', error);
                 console.error('Código de error:', error.code);
                 console.error('Mensaje:', error.message);
+                console.error('UID del usuario:', currentUser.uid);
                 showError('Error al guardar: ' + error.message);
             });
         }
@@ -1262,7 +1293,18 @@ Sé específico con números y categorías.`;
         function handleAddExpense(e) {
             e.preventDefault();
             
+            // Validar que Firebase está listo
+            if (!firebaseReady || !currentUser) {
+                console.error('❌ Firebase no está listo');
+                console.error('firebaseReady:', firebaseReady);
+                console.error('currentUser:', currentUser);
+                showError('Error: Firebase no está listo. Recarga la página.');
+                return;
+            }
+            
             console.log('📝 Registrando nuevo gasto...');
+            console.log('Firebase listo:', firebaseReady);
+            console.log('Usuario:', currentUser.email);
             
             const expense = {
                 id: Date.now().toString(),
@@ -1284,11 +1326,6 @@ Sé específico con números y categorías.`;
             console.log('Total de gastos en memoria:', expenses.length);
             
             // Guardar en Firebase
-            if (!currentUser) {
-                showError('Error: No hay usuario logueado');
-                return;
-            }
-            
             db.collection('users').doc(currentUser.uid).set({
                 expenses: expenses,
                 budgetsShared: budgetsShared,
@@ -1310,6 +1347,8 @@ Sé específico con números y categorías.`;
             })
             .catch((error) => {
                 console.error('❌ Error al guardar:', error);
+                console.error('Error code:', error.code);
+                console.error('Error message:', error.message);
                 showError('❌ Error al guardar: ' + error.message);
                 // Remover el gasto del array si falló el guardado
                 expenses.pop();
