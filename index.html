@@ -719,7 +719,7 @@
                         </div>
                     </div>
                     
-                    <div style="background: #f9fafb; border-radius: 8px; border: 0.5px solid #e5e7eb; padding: 1rem;">
+                    <div style="background: #f9fafb; border-radius: 8px; border: 0.5px solid #e5e7eb; padding: 1rem; max-height: 600px; overflow-y: auto;">
                         <div id="allExpensesContainer" style="display: flex; flex-direction: column; gap: 0.75rem;">
                             <p style="color: #6b7280; text-align: center; padding: 2rem;">Sin gastos registrados</p>
                         </div>
@@ -1457,7 +1457,6 @@ Sé específico con números y categorías.`;
             let filtered = expenses;
             
             // Filtrar por mes SOLO si se selecciona un mes específico
-            // Si está vacío ("Todos los meses"), mostrar todos incluyendo sin mes
             if (filterMonth) {
                 filtered = filtered.filter(exp => exp.month === filterMonth);
             }
@@ -1478,8 +1477,9 @@ Sé específico con números y categorías.`;
                 return;
             }
             
-            container.innerHTML = filtered.map(exp => `
-                <div class="expense-item" style="position: relative; padding-right: 2.5rem; padding: 1rem; background: white; border-radius: 8px; border: 0.5px solid #e5e7eb;">
+            // Renderizar todos los gastos (sin límite, pero con scroll en el contenedor)
+            const html = filtered.map(exp => `
+                <div class="expense-item" style="position: relative; padding-right: 2.5rem; padding: 1rem; background: white; border-radius: 8px; border: 0.5px solid #e5e7eb; flex-shrink: 0;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
                         <div>
                             <div style="font-weight: 600; color: #1f2937;">${exp.subcategory}</div>
@@ -1505,6 +1505,8 @@ Sé específico con números y categorías.`;
                     </div>
                 </div>
             `).join('');
+            
+            container.innerHTML = html;
         }
         
         function deleteExpense(expenseId) {
