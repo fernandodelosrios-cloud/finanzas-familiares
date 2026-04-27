@@ -1071,6 +1071,7 @@ Sé específico con números y categorías.`;
             'Psicólogo': 120,
             'Salud': 150,
             'Ropa': 200,
+            'Viajes': 300,
             'Varios': 100
         };
         
@@ -1083,6 +1084,7 @@ Sé específico con números y categorías.`;
             'Psicólogo': 120,
             'Salud': 150,
             'Ropa': 200,
+            'Viajes': 300,
             'Varios': 100
         };
         
@@ -1203,10 +1205,25 @@ Sé específico con números y categorías.`;
                     if (doc.exists) {
                         const data = doc.data();
                         expenses = data.expenses || [];
-                        budgetsShared = data.budgetsShared || budgetsShared;
-                        budgetsAnto = data.budgetsAnto || budgetsAnto;
-                        budgetsFer = data.budgetsFer || budgetsFer;
+                        budgetsShared = { ...budgetsShared, ...data.budgetsShared };
+                        budgetsAnto = { ...budgetsAnto, ...data.budgetsAnto };
+                        budgetsFer = { ...budgetsFer, ...data.budgetsFer };
                     }
+                    
+                    // Asegurar que Viajes existe en todos los presupuestos
+                    if (!budgetsShared.hasOwnProperty('Viajes')) {
+                        budgetsShared['Viajes'] = 300;
+                    }
+                    if (!budgetsAnto.hasOwnProperty('Viajes')) {
+                        budgetsAnto['Viajes'] = 300;
+                    }
+                    if (!budgetsFer.hasOwnProperty('Viajes')) {
+                        budgetsFer['Viajes'] = 300;
+                    }
+                    
+                    // Guardar la migración si fue necesaria
+                    saveUserData();
+                    
                     populateMonthSelectors();
                     updateDashboard();
                     renderAllExpenses();
@@ -1222,9 +1239,9 @@ Sé específico con números y categorías.`;
                 if (doc.exists) {
                     const data = doc.data();
                     expenses = data.expenses || [];
-                    budgetsShared = data.budgetsShared || budgetsShared;
-                    budgetsAnto = data.budgetsAnto || budgetsAnto;
-                    budgetsFer = data.budgetsFer || budgetsFer;
+                    budgetsShared = { ...budgetsShared, ...data.budgetsShared };
+                    budgetsAnto = { ...budgetsAnto, ...data.budgetsAnto };
+                    budgetsFer = { ...budgetsFer, ...data.budgetsFer };
                     updateDashboard();
                 }
             });
