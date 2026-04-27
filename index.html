@@ -1275,6 +1275,7 @@ Sé específico con números y categorías.`;
             // Validar que el usuario esté logueado
             if (!currentUser) {
                 console.error('❌ BLOQUEADO: No hay usuario logueado');
+                showError('❌ No hay usuario logueado');
                 return false;
             }
             
@@ -1291,6 +1292,7 @@ Sé específico con números y categorías.`;
                     isSharedValue: !isSharedValue,
                     participationValue: !participationValue
                 });
+                showError('❌ Todos los campos son requeridos');
                 return false;
             }
             
@@ -1328,16 +1330,23 @@ Sé específico con números y categorías.`;
             .then(() => {
                 console.log('✅ ÉXITO: Gasto guardado en Firebase');
                 console.log('Total de gastos guardados:', expenses.length);
+                
+                // Forzar actualización inmediata del UI
+                console.log('🔄 Actualizando UI...');
+                populateMonthSelectors();
                 updateDashboard();
                 renderAllExpenses();
-                showSuccess('✅ Gasto registrado correctamente: ' + expense.subcategory);
+                renderRecentExpenses();
+                renderReembolsos();
+                
+                showSuccess('✅ Gasto registrado: ' + expense.subcategory + ' - $' + expense.amount);
                 return true;
             })
             .catch((error) => {
                 console.error('❌ ERROR AL GUARDAR:', error);
                 console.error('Error code:', error.code);
                 console.error('Error message:', error.message);
-                showError('Error al guardar: ' + error.message);
+                showError('❌ Error: ' + error.message);
                 expenses.pop(); // Remover el gasto si falló
                 return false;
             });
