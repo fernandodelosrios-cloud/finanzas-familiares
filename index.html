@@ -1519,6 +1519,9 @@ Sé específico con números y categorías.`;
             const container = document.getElementById(elementId);
             let html = '';
             
+            // Lista de subcategorías compartidas (solo para la sección Compartido)
+            const sharedSubcategoriesForDashboard = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis'];
+            
             for (const [subcat, budget] of Object.entries(budgetObj)) {
                 let spent = 0;
                 
@@ -1529,7 +1532,8 @@ Sé específico con números y categorías.`;
                     
                     if (person === 'Compartido') {
                         // Para gastos compartidos: mostrar 100% del gasto en dashboard
-                        if (exp.isShared === 'Si') {
+                        // SOLO si está en la lista de subcategorías compartidas
+                        if (exp.isShared === 'Si' && sharedSubcategoriesForDashboard.includes(exp.subcategory)) {
                             spent += exp.amount;
                         }
                     } else {
