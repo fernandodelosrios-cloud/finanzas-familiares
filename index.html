@@ -1231,7 +1231,13 @@ Sé específico con números y categorías.`;
         }
         
         function saveUserData() {
-            if (!currentUser) return;
+            if (!currentUser) {
+                console.error('Error: No hay usuario logueado');
+                return;
+            }
+            
+            console.log('📤 Intentando guardar datos en Firebase...');
+            console.log('Gastos a guardar:', expenses.length);
             
             db.collection('users').doc(currentUser.uid).set({
                 expenses: expenses,
@@ -1239,12 +1245,24 @@ Sé específico con números y categorías.`;
                 budgetsAnto: budgetsAnto,
                 budgetsFer: budgetsFer,
                 lastUpdated: new Date()
-            }, { merge: true });
+            }, { merge: true })
+            .then(() => {
+                console.log('✅ Datos guardados exitosamente en Firebase');
+                console.log('Total de gastos guardados:', expenses.length);
+            })
+            .catch((error) => {
+                console.error('❌ Error al guardar en Firebase:', error);
+                console.error('Código de error:', error.code);
+                console.error('Mensaje:', error.message);
+                showError('Error al guardar: ' + error.message);
+            });
         }
         
         // Expense Functions
         function handleAddExpense(e) {
             e.preventDefault();
+            
+            console.log('📝 Registrando nuevo gasto...');
             
             const expense = {
                 id: Date.now().toString(),
@@ -1260,15 +1278,42 @@ Sé específico con números y categorías.`;
                 participation: document.querySelector('input[name="participation"]:checked')?.value || '50-50'
             };
             
-            expenses.push(expense);
-            saveUserData();
+            console.log('Gasto creado:', expense);
             
-            document.getElementById('expenseForm').reset();
-            setDefaultDate();
-            populateMonthSelectors();
-            showSuccess('Gasto registrado correctamente');
-            updateDashboard();
-            generateInsights();
+            expenses.push(expense);
+            console.log('Total de gastos en memoria:', expenses.length);
+            
+            // Guardar en Firebase
+            if (!currentUser) {
+                showError('Error: No hay usuario logueado');
+                return;
+            }
+            
+            db.collection('users').doc(currentUser.uid).set({
+                expenses: expenses,
+                budgetsShared: budgetsShared,
+                budgetsAnto: budgetsAnto,
+                budgetsFer: budgetsFer,
+                lastUpdated: new Date()
+            }, { merge: true })
+            .then(() => {
+                console.log('✅ Gasto guardado exitosamente en Firebase');
+                showSuccess('✅ Gasto registrado correctamente');
+                
+                // Limpiar formulario después de éxito
+                document.getElementById('expenseForm').reset();
+                setDefaultDate();
+                populateMonthSelectors();
+                updateDashboard();
+                renderAllExpenses();
+                generateInsights();
+            })
+            .catch((error) => {
+                console.error('❌ Error al guardar:', error);
+                showError('❌ Error al guardar: ' + error.message);
+                // Remover el gasto del array si falló el guardado
+                expenses.pop();
+            });
         }
         
         function updateSubcategories() {
@@ -1604,6 +1649,13 @@ Sé específico con números y categorías.`;
             errorDiv.textContent = message;
             errorDiv.classList.add('active');
             setTimeout(() => errorDiv.classList.remove('active'), 3000);
+        }
+        
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMsg');
+            successDiv.textContent = message;
+            successDiv.classList.add('active');
+            setTimeout(() => successDiv.classList.remove('active'), 3000);
         }
         
         function renderReembolsos() {
