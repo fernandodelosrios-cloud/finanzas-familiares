@@ -1258,6 +1258,91 @@ Sé específico con números y categorías.`;
             });
         }
         
+        // FUNCIÓN PÚBLICA PARA REGISTRAR GASTOS - PARA EL AGENTE
+        function registerExpense(responsibleValue, categoryValue, subcategoryValue, amountValue, monthValue, dateValue, paymentMethodValue, descriptionValue, isSharedValue, participationValue) {
+            console.log('📝 registerExpense() LLAMADA DIRECTAMENTE');
+            console.log('Parámetros recibidos:', {
+                responsibleValue,
+                categoryValue,
+                subcategoryValue,
+                amountValue,
+                monthValue,
+                dateValue,
+                isSharedValue,
+                participationValue
+            });
+            
+            // Validar que el usuario esté logueado
+            if (!currentUser) {
+                console.error('❌ BLOQUEADO: No hay usuario logueado');
+                return false;
+            }
+            
+            // Validar que todos los campos estén llenos
+            if (!responsibleValue || !categoryValue || !subcategoryValue || !amountValue || !monthValue || !dateValue || !isSharedValue || !participationValue) {
+                console.error('❌ BLOQUEADO: Campos vacíos');
+                console.error('Campos faltantes:', {
+                    responsibleValue: !responsibleValue,
+                    categoryValue: !categoryValue,
+                    subcategoryValue: !subcategoryValue,
+                    amountValue: !amountValue,
+                    monthValue: !monthValue,
+                    dateValue: !dateValue,
+                    isSharedValue: !isSharedValue,
+                    participationValue: !participationValue
+                });
+                return false;
+            }
+            
+            console.log('✅ Validación completada');
+            
+            const expense = {
+                id: Date.now().toString(),
+                responsible: responsibleValue,
+                category: categoryValue,
+                subcategory: subcategoryValue,
+                amount: parseFloat(amountValue),
+                month: monthValue,
+                date: dateValue,
+                paymentMethod: paymentMethodValue || 'Efectivo',
+                description: descriptionValue || '',
+                isShared: isSharedValue,
+                participation: participationValue
+            };
+            
+            console.log('📦 Gasto creado:', expense);
+            
+            expenses.push(expense);
+            console.log('📊 Total gastos en memoria:', expenses.length);
+            
+            // Guardar en Firebase
+            console.log('💾 Guardando en Firebase...');
+            
+            db.collection('users').doc(currentUser.uid).set({
+                expenses: expenses,
+                budgetsShared: budgetsShared,
+                budgetsAnto: budgetsAnto,
+                budgetsFer: budgetsFer,
+                lastUpdated: new Date()
+            }, { merge: true })
+            .then(() => {
+                console.log('✅ ÉXITO: Gasto guardado en Firebase');
+                console.log('Total de gastos guardados:', expenses.length);
+                updateDashboard();
+                renderAllExpenses();
+                showSuccess('✅ Gasto registrado correctamente: ' + expense.subcategory);
+                return true;
+            })
+            .catch((error) => {
+                console.error('❌ ERROR AL GUARDAR:', error);
+                console.error('Error code:', error.code);
+                console.error('Error message:', error.message);
+                showError('Error al guardar: ' + error.message);
+                expenses.pop(); // Remover el gasto si falló
+                return false;
+            });
+        }
+        
         // Expense Functions
         function handleAddExpense(e) {
             e.preventDefault();
