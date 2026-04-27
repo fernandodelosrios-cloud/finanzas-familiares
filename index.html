@@ -1259,7 +1259,7 @@ Sé específico con números y categorías.`;
         }
         
         // FUNCIÓN PÚBLICA PARA REGISTRAR GASTOS - PARA EL AGENTE
-        function registerExpense(responsibleValue, categoryValue, subcategoryValue, amountValue, monthValue, dateValue, paymentMethodValue, descriptionValue, isSharedValue, participationValue) {
+        async function registerExpense(responsibleValue, categoryValue, subcategoryValue, amountValue, monthValue, dateValue, paymentMethodValue, descriptionValue, isSharedValue, participationValue) {
             console.log('📝 registerExpense() LLAMADA DIRECTAMENTE');
             console.log('Parámetros recibidos:', {
                 responsibleValue,
@@ -1320,14 +1320,15 @@ Sé específico con números y categorías.`;
             // Guardar en Firebase
             console.log('💾 Guardando en Firebase...');
             
-            db.collection('users').doc(currentUser.uid).set({
-                expenses: expenses,
-                budgetsShared: budgetsShared,
-                budgetsAnto: budgetsAnto,
-                budgetsFer: budgetsFer,
-                lastUpdated: new Date()
-            }, { merge: true })
-            .then(() => {
+            try {
+                await db.collection('users').doc(currentUser.uid).set({
+                    expenses: expenses,
+                    budgetsShared: budgetsShared,
+                    budgetsAnto: budgetsAnto,
+                    budgetsFer: budgetsFer,
+                    lastUpdated: new Date()
+                }, { merge: true });
+                
                 console.log('✅ ÉXITO: Gasto guardado en Firebase');
                 console.log('Total de gastos guardados:', expenses.length);
                 
@@ -1339,17 +1340,17 @@ Sé específico con números y categorías.`;
                 renderRecentExpenses();
                 renderReembolsos();
                 
+                console.log('✅ UI actualizado');
                 showSuccess('✅ Gasto registrado: ' + expense.subcategory + ' - $' + expense.amount);
                 return true;
-            })
-            .catch((error) => {
+            } catch (error) {
                 console.error('❌ ERROR AL GUARDAR:', error);
                 console.error('Error code:', error.code);
                 console.error('Error message:', error.message);
                 showError('❌ Error: ' + error.message);
                 expenses.pop(); // Remover el gasto si falló
                 return false;
-            });
+            }
         }
         
         // Expense Functions
