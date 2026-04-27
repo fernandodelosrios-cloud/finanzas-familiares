@@ -801,35 +801,9 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         
-        // Variables globales
-        let currentUser = null;
-        let firebaseReady = false;
-        
-        console.log('🔥 Firebase inicializándose...');
-        
         // Asegurar persistencia de sesión
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-            .then(() => {
-                console.log('✅ Persistencia configurada');
-                firebaseReady = true;
-            })
-            .catch((error) => console.error('❌ Persistence error:', error));
-        
-        // Escuchar cambios de autenticación
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                currentUser = user;
-                firebaseReady = true;
-                console.log('🔐 Usuario logueado:', user.email);
-                console.log('UID:', user.uid);
-                loadUserData();
-                showAppContent();
-            } else {
-                currentUser = null;
-                console.log('👤 No hay usuario logueado');
-                showLoginForm();
-            }
-        });
+            .catch((error) => console.error('Persistence error:', error));
         
         // Utility Functions
         function formatCurrency(value) {
@@ -1072,6 +1046,7 @@ Sé específico con números y categorías.`;
         }
         
         // State
+        let currentUser = null;
         let expenses = [];
         let budgetsShared = {
             'Agua': 50,
@@ -1235,7 +1210,7 @@ Sé específico con números y categorías.`;
                     populateMonthSelectors();
                     updateDashboard();
                     renderAllExpenses();
-                    // generateInsights(); // Desactivado temporalmente
+                    generateInsights();
                     renderBudgetEdits();
                     document.getElementById('expenseForm').addEventListener('submit', handleAddExpense);
                     setDefaultDate();
@@ -1257,25 +1232,20 @@ Sé específico con números y categorías.`;
         
         function saveUserData() {
             if (!currentUser) {
-                console.error('❌ Error: No hay usuario logueado');
-                showError('Error: No hay usuario logueado');
+                console.error('Error: No hay usuario logueado');
                 return;
             }
             
             console.log('📤 Intentando guardar datos en Firebase...');
-            console.log('Usuario actual:', currentUser.uid);
             console.log('Gastos a guardar:', expenses.length);
             
-            const userData = {
+            db.collection('users').doc(currentUser.uid).set({
                 expenses: expenses,
                 budgetsShared: budgetsShared,
                 budgetsAnto: budgetsAnto,
                 budgetsFer: budgetsFer,
-                lastUpdated: new Date(),
-                userEmail: currentUser.email
-            };
-            
-            db.collection('users').doc(currentUser.uid).set(userData, { merge: true })
+                lastUpdated: new Date()
+            }, { merge: true })
             .then(() => {
                 console.log('✅ Datos guardados exitosamente en Firebase');
                 console.log('Total de gastos guardados:', expenses.length);
@@ -1284,155 +1254,41 @@ Sé específico con números y categorías.`;
                 console.error('❌ Error al guardar en Firebase:', error);
                 console.error('Código de error:', error.code);
                 console.error('Mensaje:', error.message);
-                console.error('UID del usuario:', currentUser.uid);
                 showError('Error al guardar: ' + error.message);
             });
         }
         
-        // Función pública para registrar gastos (puede ser llamada directamente)
-        function registerExpense(responsibleValue, categoryValue, subcategoryValue, amountValue, monthValue, dateValue, paymentMethodValue, descriptionValue, isSharedValue, participationValue) {
-            console.log('📝 registerExpense() LLAMADA DIRECTAMENTE');
-            
-            // Validar que Firebase está listo
-            if (!firebaseReady || !currentUser) {
-                console.error('❌ Firebase no está listo');
-                return false;
-            }
-            
-            console.log('Datos recibidos:', {
-                responsibleValue,
-                categoryValue,
-                subcategoryValue,
-                amountValue,
-                monthValue,
-                dateValue,
-                isSharedValue,
-                participationValue
-            });
-            
-            // Validar que todos los campos estén llenos
-            if (!responsibleValue || !categoryValue || !subcategoryValue || !amountValue || !monthValue || !dateValue || !isSharedValue || !participationValue) {
-                console.error('❌ Campos vacíos');
-                return false;
-            }
-            
-            const expense = {
-                id: Date.now().toString(),
-                responsible: responsibleValue,
-                category: categoryValue,
-                subcategory: subcategoryValue,
-                amount: parseFloat(amountValue),
-                month: monthValue,
-                date: dateValue,
-                paymentMethod: paymentMethodValue || 'Efectivo',
-                description: descriptionValue || '',
-                isShared: isSharedValue,
-                participation: participationValue
-            };
-            
-            console.log('Expense creado:', expense);
-            
-            expenses.push(expense);
-            console.log('Total gastos en memoria:', expenses.length);
-            
-            // Guardar en Firebase
-            db.collection('users').doc(currentUser.uid).set({
-                expenses: expenses,
-                budgetsShared: budgetsShared,
-                budgetsAnto: budgetsAnto,
-                budgetsFer: budgetsFer,
-                lastUpdated: new Date()
-            }, { merge: true })
-            .then(() => {
-                console.log('✅ Gasto guardado en Firebase');
-                updateDashboard();
-                renderAllExpenses();
-                return true;
-            })
-            .catch((error) => {
-                console.error('❌ Error:', error.message);
-                expenses.pop();
-                return false;
-            });
-        }
-            console.log('🔴 handleAddExpense INICIADO');
+        // Expense Functions
+        function handleAddExpense(e) {
             e.preventDefault();
             
-            console.log('1️⃣ Firebase listo:', firebaseReady);
-            console.log('2️⃣ currentUser:', currentUser?.email);
-            
-            // Validar que Firebase está listo
-            if (!firebaseReady || !currentUser) {
-                console.error('❌ BLOQUEADO: Firebase no está listo');
-                showError('Error: Firebase no está listo. Recarga la página.');
-                return;
-            }
-            
-            console.log('3️⃣ Obteniendo valores del formulario...');
-            
-            const responsible = document.getElementById('responsible').value;
-            const category = document.getElementById('category').value;
-            const subcategory = document.getElementById('subcategory').value;
-            const amount = parseFloat(document.getElementById('amount').value);
-            const month = document.getElementById('expenseMonth').value;
-            const date = document.getElementById('date').value;
-            const paymentMethod = document.getElementById('paymentMethod').value;
-            const description = document.getElementById('description').value;
-            const isShared = document.querySelector('input[name="isShared"]:checked')?.value;
-            const participation = document.querySelector('input[name="participation"]:checked')?.value;
-            
-            console.log('4️⃣ Valores obtenidos:');
-            console.log('   responsible:', responsible);
-            console.log('   category:', category);
-            console.log('   subcategory:', subcategory);
-            console.log('   amount:', amount);
-            console.log('   month:', month);
-            console.log('   date:', date);
-            console.log('   isShared:', isShared);
-            console.log('   participation:', participation);
-            
-            // Validar que todos los campos estén llenos
-            if (!responsible || !category || !subcategory || !amount || !month || !date || !isShared || !participation) {
-                console.error('❌ BLOQUEADO: Campos vacíos');
-                console.error('Campos faltantes:', {
-                    responsible: !responsible,
-                    category: !category,
-                    subcategory: !subcategory,
-                    amount: !amount,
-                    month: !month,
-                    date: !date,
-                    isShared: !isShared,
-                    participation: !participation
-                });
-                showError('Error: Completa todos los campos');
-                return;
-            }
-            
-            console.log('5️⃣ Creando objeto expense...');
+            console.log('📝 Registrando nuevo gasto...');
             
             const expense = {
                 id: Date.now().toString(),
-                responsible: responsible,
-                category: category,
-                subcategory: subcategory,
-                amount: amount,
-                month: month,
-                date: date,
-                paymentMethod: paymentMethod,
-                description: description,
-                isShared: isShared,
-                participation: participation
+                responsible: document.getElementById('responsible').value,
+                category: document.getElementById('category').value,
+                subcategory: document.getElementById('subcategory').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                month: document.getElementById('expenseMonth').value,
+                date: document.getElementById('date').value,
+                paymentMethod: document.getElementById('paymentMethod').value,
+                description: document.getElementById('description').value,
+                isShared: document.querySelector('input[name="isShared"]:checked').value,
+                participation: document.querySelector('input[name="participation"]:checked')?.value || '50-50'
             };
             
-            console.log('6️⃣ Expense creado:', expense);
+            console.log('Gasto creado:', expense);
             
-            console.log('7️⃣ Agregando a array expenses...');
             expenses.push(expense);
-            console.log('8️⃣ Total gastos en memoria:', expenses.length);
-            
-            console.log('9️⃣ Guardando en Firebase...');
+            console.log('Total de gastos en memoria:', expenses.length);
             
             // Guardar en Firebase
+            if (!currentUser) {
+                showError('Error: No hay usuario logueado');
+                return;
+            }
+            
             db.collection('users').doc(currentUser.uid).set({
                 expenses: expenses,
                 budgetsShared: budgetsShared,
@@ -1441,22 +1297,21 @@ Sé específico con números y categorías.`;
                 lastUpdated: new Date()
             }, { merge: true })
             .then(() => {
-                console.log('✅ ÉXITO: Gasto guardado en Firebase');
+                console.log('✅ Gasto guardado exitosamente en Firebase');
                 showSuccess('✅ Gasto registrado correctamente');
                 
-                console.log('🔟 Limpiando formulario...');
+                // Limpiar formulario después de éxito
                 document.getElementById('expenseForm').reset();
                 setDefaultDate();
                 populateMonthSelectors();
                 updateDashboard();
                 renderAllExpenses();
+                generateInsights();
             })
             .catch((error) => {
-                console.error('❌ ERROR DE FIREBASE:');
-                console.error('   code:', error.code);
-                console.error('   message:', error.message);
-                console.error('   fullError:', error);
+                console.error('❌ Error al guardar:', error);
                 showError('❌ Error al guardar: ' + error.message);
+                // Remover el gasto del array si falló el guardado
                 expenses.pop();
             });
         }
@@ -1801,20 +1656,6 @@ Sé específico con números y categorías.`;
             successDiv.textContent = message;
             successDiv.classList.add('active');
             setTimeout(() => successDiv.classList.remove('active'), 3000);
-        }
-        
-        function showAppContent() {
-            const loginContainer = document.getElementById('loginContainer');
-            const appContainer = document.getElementById('appContainer');
-            if (loginContainer) loginContainer.style.display = 'none';
-            if (appContainer) appContainer.style.display = 'block';
-        }
-        
-        function showLoginForm() {
-            const loginContainer = document.getElementById('loginContainer');
-            const appContainer = document.getElementById('appContainer');
-            if (loginContainer) loginContainer.style.display = 'block';
-            if (appContainer) appContainer.style.display = 'none';
         }
         
         function renderReembolsos() {
