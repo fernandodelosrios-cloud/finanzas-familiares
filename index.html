@@ -1456,7 +1456,8 @@ Sé específico con números y categorías.`;
             
             let filtered = expenses;
             
-            // Filtrar por mes
+            // Filtrar por mes SOLO si se selecciona un mes específico
+            // Si está vacío ("Todos los meses"), mostrar todos incluyendo sin mes
             if (filterMonth) {
                 filtered = filtered.filter(exp => exp.month === filterMonth);
             }
@@ -1499,7 +1500,7 @@ Sé específico con números y categorías.`;
                     ${exp.description ? `<div style="font-size: 13px; color: #6b7280; margin-bottom: 0.75rem; font-style: italic;">📝 ${exp.description}</div>` : ''}
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 0.5px solid #e5e7eb;">
-                        <span style="font-size: 12px; color: #9ca3af;">Mes: ${getMonthName(exp.month)}</span>
+                        <span style="font-size: 12px; color: #9ca3af;">Mes: ${exp.month ? getMonthName(exp.month) : 'Sin mes (anterior)'}</span>
                         <button onclick="deleteExpense('${exp.id}')" style="background: #fee; color: #c33; border: none; border-radius: 4px; width: 28px; height: 28px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;">×</button>
                     </div>
                 </div>
@@ -1587,6 +1588,13 @@ Sé específico con números y categorías.`;
             
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
+            
+            // Renderizar contenido específico cuando cambias de tab
+            if (tabName === 'budgets') {
+                renderBudgetEdits();
+            } else if (tabName === 'allExpenses') {
+                renderAllExpenses();
+            }
         }
         
         function showError(message) {
@@ -1601,37 +1609,58 @@ Sé específico con números y categorías.`;
             const filterMonth = document.getElementById('reembolsosMonth')?.value || null;
             let html = '';
             
-            // Calcular reembolsos
+            // Calcular reembolsos y guardar gastos asociados
             let antoDebeAFer = 0;
             let ferDebeAAnto = 0;
+            let antoDebeAFerGastos = [];
+            let ferDebeAAntoGastos = [];
             
             expenses.forEach(exp => {
                 // Filtrar por mes si se especifica
                 if (filterMonth && exp.month !== filterMonth) return;
                 
                 // LÓGICA DE REEMBOLSOS:
-                // Si Fer paga (responsible = Fer):
-                //   - 50-50: Anto debe 50% a Fer
-                //   - Anto 100%: Anto debe 100% a Fer
-                // Si Anto paga (responsible = Anto):
-                //   - 50-50: Fer debe 50% a Anto
-                //   - Fer 100%: Fer debe 100% a Anto
-                
                 if (exp.responsible === 'Fer') {
                     if (exp.isShared === 'Si' && exp.participation === '50-50') {
-                        // Fer paga 50-50: Anto debe 50% a Fer
-                        antoDebeAFer += exp.amount * 0.5;
+                        const monto = exp.amount * 0.5;
+                        antoDebeAFer += monto;
+                        antoDebeAFerGastos.push({
+                            subcategory: exp.subcategory,
+                            amount: exp.amount,
+                            participation: '50%',
+                            monto: monto,
+                            date: exp.date
+                        });
                     } else if (exp.participation === 'Anto 100%') {
-                        // Fer paga 100% de Anto: Anto debe 100% a Fer
                         antoDebeAFer += exp.amount;
+                        antoDebeAFerGastos.push({
+                            subcategory: exp.subcategory,
+                            amount: exp.amount,
+                            participation: '100%',
+                            monto: exp.amount,
+                            date: exp.date
+                        });
                     }
                 } else if (exp.responsible === 'Anto') {
                     if (exp.isShared === 'Si' && exp.participation === '50-50') {
-                        // Anto paga 50-50: Fer debe 50% a Anto
-                        ferDebeAAnto += exp.amount * 0.5;
+                        const monto = exp.amount * 0.5;
+                        ferDebeAAnto += monto;
+                        ferDebeAAntoGastos.push({
+                            subcategory: exp.subcategory,
+                            amount: exp.amount,
+                            participation: '50%',
+                            monto: monto,
+                            date: exp.date
+                        });
                     } else if (exp.participation === 'Fer 100%') {
-                        // Anto paga 100% de Fer: Fer debe 100% a Anto
                         ferDebeAAnto += exp.amount;
+                        ferDebeAAntoGastos.push({
+                            subcategory: exp.subcategory,
+                            amount: exp.amount,
+                            participation: '100%',
+                            monto: exp.amount,
+                            date: exp.date
+                        });
                     }
                 }
             });
@@ -1641,13 +1670,30 @@ Sé específico con números y categorías.`;
                 return;
             }
             
-            html = '<div style="display: flex; flex-direction: column; gap: 1rem;">';
+            html = '<div style="display: flex; flex-direction: column; gap: 1.5rem;">';
             
             if (antoDebeAFer > 0) {
                 html += `
                     <div style="padding: 1rem; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px;">
                         <div style="font-weight: 600; color: #92400e; margin-bottom: 0.5rem;">Anto debe a Fer</div>
-                        <div style="font-size: 24px; font-weight: 700; color: #d97706;">${formatCurrency(antoDebeAFer)}</div>
+                        <div style="font-size: 24px; font-weight: 700; color: #d97706; margin-bottom: 1rem;">${formatCurrency(antoDebeAFer)}</div>
+                        
+                        <details style="cursor: pointer;">
+                            <summary style="color: #92400e; font-size: 13px; font-weight: 500; padding: 0.5rem; background: rgba(245, 158, 11, 0.1); border-radius: 4px;">
+                                📋 Ver gastos (${antoDebeAFerGastos.length})
+                            </summary>
+                            <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(245, 158, 11, 0.3);">
+                                ${antoDebeAFerGastos.map(gasto => `
+                                    <div style="padding: 0.5rem 0; border-bottom: 0.5px solid rgba(245, 158, 11, 0.2); font-size: 13px;">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="color: #4b5563;"><strong>${gasto.subcategory}</strong> (${gasto.participation})</span>
+                                            <span style="color: #92400e; font-weight: 600;">${formatCurrency(gasto.monto)}</span>
+                                        </div>
+                                        <div style="font-size: 11px; color: #9ca3af; margin-top: 0.25rem;">📅 ${gasto.date}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </details>
                     </div>
                 `;
             }
@@ -1656,7 +1702,24 @@ Sé específico con números y categorías.`;
                 html += `
                     <div style="padding: 1rem; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 8px;">
                         <div style="font-weight: 600; color: #1e3a8a; margin-bottom: 0.5rem;">Fer debe a Anto</div>
-                        <div style="font-size: 24px; font-weight: 700; color: #1d4ed8;">${formatCurrency(ferDebeAAnto)}</div>
+                        <div style="font-size: 24px; font-weight: 700; color: #1d4ed8; margin-bottom: 1rem;">${formatCurrency(ferDebeAAnto)}</div>
+                        
+                        <details style="cursor: pointer;">
+                            <summary style="color: #1e3a8a; font-size: 13px; font-weight: 500; padding: 0.5rem; background: rgba(59, 130, 246, 0.1); border-radius: 4px;">
+                                📋 Ver gastos (${ferDebeAAntoGastos.length})
+                            </summary>
+                            <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(59, 130, 246, 0.3);">
+                                ${ferDebeAAntoGastos.map(gasto => `
+                                    <div style="padding: 0.5rem 0; border-bottom: 0.5px solid rgba(59, 130, 246, 0.2); font-size: 13px;">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span style="color: #4b5563;"><strong>${gasto.subcategory}</strong> (${gasto.participation})</span>
+                                            <span style="color: #1e3a8a; font-weight: 600;">${formatCurrency(gasto.monto)}</span>
+                                        </div>
+                                        <div style="font-size: 11px; color: #9ca3af; margin-top: 0.25rem;">📅 ${gasto.date}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </details>
                     </div>
                 `;
             }
