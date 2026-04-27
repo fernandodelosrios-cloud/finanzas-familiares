@@ -1289,8 +1289,72 @@ Sé específico con números y categorías.`;
             });
         }
         
-        // Expense Functions
-        function handleAddExpense(e) {
+        // Función pública para registrar gastos (puede ser llamada directamente)
+        function registerExpense(responsibleValue, categoryValue, subcategoryValue, amountValue, monthValue, dateValue, paymentMethodValue, descriptionValue, isSharedValue, participationValue) {
+            console.log('📝 registerExpense() LLAMADA DIRECTAMENTE');
+            
+            // Validar que Firebase está listo
+            if (!firebaseReady || !currentUser) {
+                console.error('❌ Firebase no está listo');
+                return false;
+            }
+            
+            console.log('Datos recibidos:', {
+                responsibleValue,
+                categoryValue,
+                subcategoryValue,
+                amountValue,
+                monthValue,
+                dateValue,
+                isSharedValue,
+                participationValue
+            });
+            
+            // Validar que todos los campos estén llenos
+            if (!responsibleValue || !categoryValue || !subcategoryValue || !amountValue || !monthValue || !dateValue || !isSharedValue || !participationValue) {
+                console.error('❌ Campos vacíos');
+                return false;
+            }
+            
+            const expense = {
+                id: Date.now().toString(),
+                responsible: responsibleValue,
+                category: categoryValue,
+                subcategory: subcategoryValue,
+                amount: parseFloat(amountValue),
+                month: monthValue,
+                date: dateValue,
+                paymentMethod: paymentMethodValue || 'Efectivo',
+                description: descriptionValue || '',
+                isShared: isSharedValue,
+                participation: participationValue
+            };
+            
+            console.log('Expense creado:', expense);
+            
+            expenses.push(expense);
+            console.log('Total gastos en memoria:', expenses.length);
+            
+            // Guardar en Firebase
+            db.collection('users').doc(currentUser.uid).set({
+                expenses: expenses,
+                budgetsShared: budgetsShared,
+                budgetsAnto: budgetsAnto,
+                budgetsFer: budgetsFer,
+                lastUpdated: new Date()
+            }, { merge: true })
+            .then(() => {
+                console.log('✅ Gasto guardado en Firebase');
+                updateDashboard();
+                renderAllExpenses();
+                return true;
+            })
+            .catch((error) => {
+                console.error('❌ Error:', error.message);
+                expenses.pop();
+                return false;
+            });
+        }
             console.log('🔴 handleAddExpense INICIADO');
             e.preventDefault();
             
