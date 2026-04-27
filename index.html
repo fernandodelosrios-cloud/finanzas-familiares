@@ -1235,7 +1235,7 @@ Sé específico con números y categorías.`;
                     populateMonthSelectors();
                     updateDashboard();
                     renderAllExpenses();
-                    generateInsights();
+                    // generateInsights(); // Desactivado temporalmente
                     renderBudgetEdits();
                     document.getElementById('expenseForm').addEventListener('submit', handleAddExpense);
                     setDefaultDate();
@@ -1343,7 +1343,8 @@ Sé específico con números y categorías.`;
                 populateMonthSelectors();
                 updateDashboard();
                 renderAllExpenses();
-                generateInsights();
+                
+                // Desactivado temporalmente - generateInsights();
             })
             .catch((error) => {
                 console.error('❌ Error al guardar:', error);
@@ -1695,6 +1696,20 @@ Sé específico con números y categorías.`;
             successDiv.textContent = message;
             successDiv.classList.add('active');
             setTimeout(() => successDiv.classList.remove('active'), 3000);
+        }
+        
+        function showAppContent() {
+            const loginContainer = document.getElementById('loginContainer');
+            const appContainer = document.getElementById('appContainer');
+            if (loginContainer) loginContainer.style.display = 'none';
+            if (appContainer) appContainer.style.display = 'block';
+        }
+        
+        function showLoginForm() {
+            const loginContainer = document.getElementById('loginContainer');
+            const appContainer = document.getElementById('appContainer');
+            if (loginContainer) loginContainer.style.display = 'block';
+            if (appContainer) appContainer.style.display = 'none';
         }
         
         function renderReembolsos() {
