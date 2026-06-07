@@ -699,8 +699,27 @@
         }
         
         function saveUserData() {
-            if (!currentUser) return;
-            db.collection('users').doc(currentUser.uid).set({expenses, budgetsShared, budgetsAnto, budgetsFer}, {merge: true});
+            if (!currentUser) {
+                console.warn('⚠️ No hay usuario logueado');
+                return;
+            }
+            
+            console.log('💾 Iniciando guardado en Firebase...');
+            
+            db.collection('users').doc(currentUser.uid).set({
+                expenses: expenses,
+                budgetsShared: budgetsShared,
+                budgetsAnto: budgetsAnto,
+                budgetsFer: budgetsFer,
+                lastUpdated: new Date()
+            }, {merge: true})
+            .then(() => {
+                console.log('✅ Datos guardados en Firebase exitosamente');
+            })
+            .catch((error) => {
+                console.error('❌ Error guardando en Firebase:', error);
+                showError('Error guardando: ' + error.message);
+            });
         }
         
         function handleAddExpense(e) {
@@ -951,51 +970,121 @@
         
         function handleExcelUpload() {
             const file = document.getElementById('excelFile').files[0];
-            if (!file) { showError('Selecciona un archivo'); return; }
+            if (!file) { 
+                showError('Selecciona un archivo'); 
+                return; 
+            }
             
+            console.log('📄 Archivo:', file.name);
             document.getElementById('excelStatus').textContent = '⏳ Procesando...';
+            
             const reader = new FileReader();
+            
+            reader.onerror = (error) => {
+                console.error('❌ FileReader error:', error);
+                showError('Error al leer el archivo');
+            };
             
             reader.onload = (e) => {
                 try {
+                    console.log('✅ Archivo leído');
+                    
                     const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    
+                    if (typeof XLSX === 'undefined') {
+                        throw new Error('SheetJS no está disponible');
+                    }
+                    
+                    const workbook = XLSX.read(data, { type: 'array', defval: '' });
+                    console.log('✅ Workbook leído:', workbook.SheetNames);
+                    
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(worksheet, { 
+                        defval: '', 
+                        blankrows: false 
+                    });
+                    
+                    console.log('✅ Filas leídas:', rows.length);
+                    
+                    if (rows.length === 0) {
+                        throw new Error('No hay datos en la hoja');
+                    }
                     
                     let successCount = 0;
-                    rows.forEach(row => {
-                        if (row.Responsable && row.Categoría && row.Subcategoría && row.Monto && row.Mes && row.Fecha && row.Compartido && row.Participación) {
-                            expenses.push({
+                    let errorCount = 0;
+                    
+                    rows.forEach((row, index) => {
+                        try {
+                            const responsable = row.Responsable ? row.Responsable.toString().trim() : '';
+                            const categoria = row.Categoría ? row.Categoría.toString().trim() : '';
+                            const subcategoria = row.Subcategoría ? row.Subcategoría.toString().trim() : '';
+                            const monto = row.Monto ? parseFloat(row.Monto) : 0;
+                            const mes = row.Mes ? row.Mes.toString().trim() : '';
+                            const fecha = row.Fecha ? row.Fecha.toString().trim() : '';
+                            const compartido = row.Compartido ? row.Compartido.toString().trim() : '';
+                            const participacion = row.Participación ? row.Participación.toString().trim() : '';
+                            
+                            if (!responsable || !categoria || !subcategoria || !monto || !mes || !fecha || !compartido || !participacion) {
+                                console.warn(`⚠️ Fila ${index + 1} incompleta`);
+                                errorCount++;
+                                return;
+                            }
+                            
+                            const expense = {
                                 id: Date.now().toString() + Math.random(),
-                                responsible: row.Responsable.toString().trim(),
-                                category: row.Categoría.toString().trim(),
-                                subcategory: row.Subcategoría.toString().trim(),
-                                amount: parseFloat(row.Monto),
-                                month: row.Mes.toString().trim(),
-                                date: row.Fecha.toString().trim(),
+                                responsible: responsable,
+                                category: categoria,
+                                subcategory: subcategoria,
+                                amount: monto,
+                                month: mes,
+                                date: fecha,
                                 paymentMethod: row['Medio de Pago'] ? row['Medio de Pago'].toString().trim() : 'Efectivo',
                                 description: row.Descripción ? row.Descripción.toString().trim() : '',
-                                isShared: row.Compartido.toString().trim(),
-                                participation: row.Participación.toString().trim()
-                            });
+                                isShared: compartido,
+                                participation: participacion
+                            };
+                            
+                            expenses.push(expense);
                             successCount++;
+                            console.log(`✅ Fila ${index + 1} agregada`);
+                        } catch (rowError) {
+                            console.error(`❌ Fila ${index + 1}:`, rowError);
+                            errorCount++;
                         }
                     });
                     
+                    console.log(`📊 ${successCount} gastos válidos, ${errorCount} errores`);
+                    
+                    if (successCount === 0) {
+                        showError('No se pudo cargar ningún gasto');
+                        document.getElementById('excelStatus').textContent = '❌ Sin gastos válidos';
+                        return;
+                    }
+                    
+                    // ACTUALIZAR UI INMEDIATAMENTE
+                    console.log('🔄 Actualizando interfaz...');
+                    populateMonthSelectors();
+                    updateDashboard();
+                    renderAllExpenses();
+                    
+                    const message = `✅ ${successCount} cargados`;
+                    document.getElementById('excelStatus').textContent = message;
+                    showSuccess(message);
+                    document.getElementById('excelFile').value = '';
+                    
+                    // GUARDAR EN FIREBASE EN BACKGROUND (sin bloquear)
+                    console.log('💾 Guardando en Firebase (en background)...');
                     saveUserData();
-                    setTimeout(() => {
-                        populateMonthSelectors();
-                        updateDashboard();
-                        renderAllExpenses();
-                        document.getElementById('excelStatus').textContent = `✅ ${successCount} cargados`;
-                        showSuccess(`✅ ${successCount} gastos registrados`);
-                        document.getElementById('excelFile').value = '';
-                        setTimeout(() => document.getElementById('excelStatus').textContent = '', 5000);
-                    }, 1000);
+                    
+                    setTimeout(() => document.getElementById('excelStatus').textContent = '', 5000);
+                    
                 } catch (error) {
+                    console.error('❌ Error:', error.message);
                     showError('Error: ' + error.message);
+                    document.getElementById('excelStatus').textContent = '❌ Error';
                 }
             };
+            
             reader.readAsArrayBuffer(file);
         }
         
