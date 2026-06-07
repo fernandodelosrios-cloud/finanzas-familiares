@@ -983,9 +983,16 @@
         }
         
         function calculateExpensesByPerson(person, filterMonth = null) {
+            // Solo contar gastos variables de Anto y Fer
+            const gastosFijos = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'];
+            
             let total = 0;
             expenses.forEach(exp => {
                 if (filterMonth && exp.month !== filterMonth) return;
+                
+                // Excluir gastos fijos
+                if (gastosFijos.includes(exp.subcategory)) return;
+                
                 if (exp.isShared === 'Si') {
                     if (exp.participation === '50-50') total += exp.amount / 2;
                     else if (exp.participation.includes(person)) total += exp.amount;
@@ -997,17 +1004,19 @@
         }
         
         function calculateSharedExpenses(filterMonth = null) {
-            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado'];
+            // Solo contar gastos fijos compartidos
+            const gastosFijos = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'];
+            
             let total = 0;
             expenses.forEach(exp => {
                 if (filterMonth && exp.month !== filterMonth) return;
-                if (exp.isShared === 'Si' && sharedSubs.includes(exp.subcategory)) total += exp.amount;
+                if (exp.isShared === 'Si' && gastosFijos.includes(exp.subcategory)) total += exp.amount;
             });
             return total;
         }
         
         function renderBudgetSection(elementId, person, budgetObj, filterMonth = null) {
-            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado'];
+            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'];
             let html = '';
             
             for (const [subcat, budgetVal] of Object.entries(budgetObj)) {
@@ -1134,7 +1143,10 @@
             const container = document.getElementById('reembolsosContent');
             const filterMonth = document.getElementById('reembolsosMonth').value;
             
-            // Calcular deudas por mes
+            // Gastos fijos que se excluyen de reembolsos
+            const gastosFijos = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'];
+            
+            // Calcular deudas por mes - INCLUIR TODOS LOS GASTOS VARIABLES (compartidos e individuales)
             let antoDebeAFer = 0;
             let ferDebeAAnto = 0;
             let gastos_antoDebeAFer = [];
@@ -1142,6 +1154,9 @@
             
             expenses.forEach(exp => {
                 if (filterMonth && exp.month !== filterMonth) return;
+                
+                // Excluir gastos fijos - incluir solo variables
+                if (gastosFijos.includes(exp.subcategory)) return;
                 
                 if (exp.responsible === 'Fer') {
                     if (exp.isShared === 'Si' && exp.participation === '50-50') {
