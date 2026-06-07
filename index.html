@@ -652,7 +652,6 @@
         let currentUser = null;
         let expenses = [];
         let editingExpenseIndex = null;  // Para rastrear qué gasto se está editando
-        let saveTimeoutId = null;  // Para debounce de saveUserData
         
         // Presupuestos por mes: { 'YYYY-MM': { 'Agua': 50, ... } }
         let budgetsShared = {};
@@ -848,35 +847,25 @@
                 return;
             }
             
-            // Cancelar guardado anterior si existe (debounce)
-            if (saveTimeoutId) {
-                clearTimeout(saveTimeoutId);
-            }
+            console.log('💾 Guardando en Firebase...');
+            console.log('📊 Gastos:', expenses.length, 'items');
+            console.log('📋 Presupuestos Anto:', Object.keys(budgetsAnto).length, 'meses');
+            console.log('📋 Presupuestos Fer:', Object.keys(budgetsFer).length, 'meses');
             
-            // Guardar después de 1 segundo de inactividad
-            saveTimeoutId = setTimeout(() => {
-                console.log('💾 Iniciando guardado en Firebase...');
-                console.log('📊 Gastos:', expenses.length, 'items');
-                console.log('📋 Presupuestos Anto:', Object.keys(budgetsAnto).length, 'meses');
-                console.log('📋 Presupuestos Fer:', Object.keys(budgetsFer).length, 'meses');
-                
-                db.collection('users').doc(currentUser.uid).set({
-                    expenses: expenses,
-                    budgetsShared: budgetsShared,
-                    budgetsAnto: budgetsAnto,
-                    budgetsFer: budgetsFer,
-                    lastUpdated: new Date()
-                }, {merge: true})
-                .then(() => {
-                    console.log('✅ Datos guardados en Firebase exitosamente');
-                })
-                .catch((error) => {
-                    console.error('❌ Error guardando en Firebase:', error);
-                    showError('Error guardando: ' + error.message);
-                });
-                
-                saveTimeoutId = null;
-            }, 1000);
+            db.collection('users').doc(currentUser.uid).set({
+                expenses: expenses,
+                budgetsShared: budgetsShared,
+                budgetsAnto: budgetsAnto,
+                budgetsFer: budgetsFer,
+                lastUpdated: new Date()
+            }, {merge: true})
+            .then(() => {
+                console.log('✅ Datos guardados en Firebase');
+            })
+            .catch((error) => {
+                console.error('❌ Error guardando en Firebase:', error);
+                showError('Error guardando: ' + error.message);
+            });
         }
         
         function handleAddExpense(e) {
@@ -1514,6 +1503,9 @@
                         populateMonthSelectors();
                         updateDashboard();
                         renderAllExpenses();
+                        
+                        // GUARDAR EN FIREBASE
+                        saveUserData();
                         
                         const message = `✅ ${successCount} cargados`;
                         document.getElementById('excelStatus').textContent = message;
