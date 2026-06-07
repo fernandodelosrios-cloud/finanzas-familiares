@@ -651,7 +651,9 @@
         
         let currentUser = null;
         let expenses = [];
-        let editingExpenseIndex = null;  // Para rastrear qué gasto se está editando
+        let editingExpenseIndex = null;
+        let isSavingToFirebase = false;
+        let pendingSave = false;  // Si hay un guardado pendiente mientras se guarda
         
         // Presupuestos por mes: { 'YYYY-MM': { 'Agua': 50, ... } }
         let budgetsShared = {};
@@ -845,10 +847,15 @@
                 return;
             }
             
-            console.log('💾 Guardando en Firebase...');
-            console.log('📊 Gastos:', expenses.length, 'items');
-            console.log('📋 Presupuestos Anto:', Object.keys(budgetsAnto).length, 'meses');
-            console.log('📋 Presupuestos Fer:', Object.keys(budgetsFer).length, 'meses');
+            // Si ya hay un guardado en progreso, marcar pendiente y salir
+            if (isSavingToFirebase) {
+                pendingSave = true;
+                return;
+            }
+            
+            isSavingToFirebase = true;
+            pendingSave = false;
+            console.log('💾 Guardando en Firebase... (' + expenses.length + ' gastos)');
             
             db.collection('users').doc(currentUser.uid).set({
                 expenses: expenses,
@@ -859,10 +866,19 @@
             }, {merge: true})
             .then(() => {
                 console.log('✅ Datos guardados en Firebase');
+                isSavingToFirebase = false;
+                // Si quedó un guardado pendiente, ejecutarlo ahora
+                if (pendingSave) {
+                    console.log('🔁 Ejecutando guardado pendiente...');
+                    saveUserData();
+                }
             })
             .catch((error) => {
                 console.error('❌ Error guardando en Firebase:', error);
-                showError('Error guardando: ' + error.message);
+                isSavingToFirebase = false;
+                if (!error.message.includes('resource-exhausted')) {
+                    showError('Error guardando: ' + error.message);
+                }
             });
         }
         
@@ -1502,17 +1518,13 @@
                         updateDashboard();
                         renderAllExpenses();
                         
-                        // GUARDAR EN FIREBASE
+                        // GUARDAR EN FIREBASE (una sola vez)
                         saveUserData();
                         
                         const message = `✅ ${successCount} cargados`;
                         document.getElementById('excelStatus').textContent = message;
                         showSuccess(message);
                         document.getElementById('excelFile').value = '';
-                        
-                        // GUARDAR EN FIREBASE EN BACKGROUND
-                        console.log('💾 Guardando en Firebase...');
-                        saveUserData();
                         
                         setTimeout(() => document.getElementById('excelStatus').textContent = '', 5000);
                         
