@@ -652,6 +652,7 @@
         let currentUser = null;
         let expenses = [];
         let editingExpenseIndex = null;  // Para rastrear qué gasto se está editando
+        let saveTimeoutId = null;  // Para debounce de saveUserData
         
         // Presupuestos por mes: { 'YYYY-MM': { 'Agua': 50, ... } }
         let budgetsShared = {};
@@ -660,8 +661,8 @@
         
         // Presupuestos base (para nuevos meses)
         const defaultBudgetsShared = {'Agua': 50, 'Alquiler': 1500, 'Atlas y Ares': 200, 'Equipamiento casa': 100, 'Luz': 80, 'Limpieza': 100, 'Internet + Celulares': 80, 'Gas': 50, 'Supermercado': 400};
-        const defaultBudgetsAnto = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100, 'Taxis': 150};
-        const defaultBudgetsFer = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100, 'Taxis': 150};
+        const defaultBudgetsAnto = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100, 'Taxis': 150, 'Supermercado': 200};
+        const defaultBudgetsFer = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100, 'Taxis': 150, 'Supermercado': 200};
         
         const categories = {'Gastos fijos': ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'], 'Gastos variables': ['Deporte', 'Peluquería', 'Psicólogo', 'Ropa', 'Salud', 'Social', 'Streaming / Suscripciones', 'Transporte público', 'Varios', 'Supermercado', 'Taxis', 'Viajes']};
         
@@ -799,6 +800,14 @@
                         if (!budgetsFer[exp.month]['Taxis']) {
                             budgetsFer[exp.month]['Taxis'] = 150;
                         }
+                        
+                        // CORRECCIÓN: Agregar Supermercado en Anto y Fer si no existe
+                        if (!budgetsAnto[exp.month]['Supermercado']) {
+                            budgetsAnto[exp.month]['Supermercado'] = 200;
+                        }
+                        if (!budgetsFer[exp.month]['Supermercado']) {
+                            budgetsFer[exp.month]['Supermercado'] = 200;
+                        }
                     }
                 });
                 
@@ -811,6 +820,14 @@
                 }
                 if (!budgetsFer[currentMonth]['Taxis']) {
                     budgetsFer[currentMonth]['Taxis'] = 150;
+                }
+                
+                // Agregar Supermercado al mes actual si no existe
+                if (!budgetsAnto[currentMonth]['Supermercado']) {
+                    budgetsAnto[currentMonth]['Supermercado'] = 200;
+                }
+                if (!budgetsFer[currentMonth]['Supermercado']) {
+                    budgetsFer[currentMonth]['Supermercado'] = 200;
                 }
                 
                 // Guardar la estructura corregida en Firebase
@@ -831,22 +848,35 @@
                 return;
             }
             
-            console.log('💾 Iniciando guardado en Firebase...');
+            // Cancelar guardado anterior si existe (debounce)
+            if (saveTimeoutId) {
+                clearTimeout(saveTimeoutId);
+            }
             
-            db.collection('users').doc(currentUser.uid).set({
-                expenses: expenses,
-                budgetsShared: budgetsShared,
-                budgetsAnto: budgetsAnto,
-                budgetsFer: budgetsFer,
-                lastUpdated: new Date()
-            }, {merge: true})
-            .then(() => {
-                console.log('✅ Datos guardados en Firebase exitosamente');
-            })
-            .catch((error) => {
-                console.error('❌ Error guardando en Firebase:', error);
-                showError('Error guardando: ' + error.message);
-            });
+            // Guardar después de 1 segundo de inactividad
+            saveTimeoutId = setTimeout(() => {
+                console.log('💾 Iniciando guardado en Firebase...');
+                console.log('📊 Gastos:', expenses.length, 'items');
+                console.log('📋 Presupuestos Anto:', Object.keys(budgetsAnto).length, 'meses');
+                console.log('📋 Presupuestos Fer:', Object.keys(budgetsFer).length, 'meses');
+                
+                db.collection('users').doc(currentUser.uid).set({
+                    expenses: expenses,
+                    budgetsShared: budgetsShared,
+                    budgetsAnto: budgetsAnto,
+                    budgetsFer: budgetsFer,
+                    lastUpdated: new Date()
+                }, {merge: true})
+                .then(() => {
+                    console.log('✅ Datos guardados en Firebase exitosamente');
+                })
+                .catch((error) => {
+                    console.error('❌ Error guardando en Firebase:', error);
+                    showError('Error guardando: ' + error.message);
+                });
+                
+                saveTimeoutId = null;
+            }, 1000);
         }
         
         function handleAddExpense(e) {
@@ -983,19 +1013,24 @@
         }
         
         function calculateExpensesByPerson(person, filterMonth = null) {
-            // Solo contar gastos variables de Anto y Fer
+            // Contar gastos variables de Anto y Fer
             const gastosFijos = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'];
             
             let total = 0;
             expenses.forEach(exp => {
                 if (filterMonth && exp.month !== filterMonth) return;
                 
-                // Excluir gastos fijos
+                // Excluir gastos fijos (excepto Supermercado que es variable cuando es 100%)
                 if (gastosFijos.includes(exp.subcategory)) return;
                 
                 if (exp.isShared === 'Si') {
-                    if (exp.participation === '50-50') total += exp.amount / 2;
-                    else if (exp.participation.includes(person)) total += exp.amount;
+                    if (exp.participation === '50-50') {
+                        // Supermercado 50-50 NO se cuenta aquí (va en compartido)
+                        if (exp.subcategory === 'Supermercado') return;
+                        total += exp.amount / 2;
+                    } else if (exp.participation.includes(person)) {
+                        total += exp.amount;
+                    }
                 } else {
                     if (exp.responsible === person) total += exp.amount;
                 }
@@ -1010,7 +1045,14 @@
             let total = 0;
             expenses.forEach(exp => {
                 if (filterMonth && exp.month !== filterMonth) return;
-                if (exp.isShared === 'Si' && gastosFijos.includes(exp.subcategory)) total += exp.amount;
+                if (exp.isShared === 'Si') {
+                    // Supermercado solo se cuenta si es 50-50
+                    if (exp.subcategory === 'Supermercado') {
+                        if (exp.participation === '50-50') total += exp.amount;
+                    } else if (gastosFijos.includes(exp.subcategory)) {
+                        total += exp.amount;
+                    }
+                }
             });
             return total;
         }
@@ -1030,11 +1072,23 @@
                     if (exp.subcategory !== subcat) return;
                     
                     if (person === 'Compartido') {
-                        if (exp.isShared === 'Si' && sharedSubs.includes(exp.subcategory)) spent += exp.amount;
+                        if (exp.isShared === 'Si') {
+                            if (sharedSubs.includes(exp.subcategory)) {
+                                spent += exp.amount;
+                            } else if (exp.subcategory === 'Supermercado' && exp.participation === '50-50') {
+                                spent += exp.amount;
+                            }
+                        }
                     } else {
                         if (exp.isShared === 'Si') {
-                            if (exp.participation === '50-50') spent += exp.amount / 2;
-                            else if (exp.participation === person + ' 100%') spent += exp.amount;
+                            if (exp.subcategory === 'Supermercado' && exp.participation === '50-50') {
+                                // Supermercado 50-50 NO se cuenta en Anto/Fer
+                                return;
+                            } else if (exp.participation === '50-50') {
+                                spent += exp.amount / 2;
+                            } else if (exp.participation === person + ' 100%') {
+                                spent += exp.amount;
+                            }
                         } else if (exp.responsible === person) {
                             spent += exp.amount;
                         }
