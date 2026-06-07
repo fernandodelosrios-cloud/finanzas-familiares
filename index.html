@@ -23,7 +23,7 @@
             padding: 1rem;
         }
         
-        /* LOGIN SCREEN */
+        /* LOGIN */
         .login-screen {
             display: none;
             justify-content: center;
@@ -83,7 +83,6 @@
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             font-size: 14px;
-            transition: border-color 0.2s;
         }
         
         .form-group input:focus {
@@ -111,13 +110,6 @@
             background: #475a1f;
         }
         
-        .button.secondary {
-            background: transparent;
-            color: #556b2f;
-            border: 1px solid #556b2f;
-            width: 100%;
-        }
-        
         .toggle-auth {
             text-align: center;
             margin-top: 1rem;
@@ -131,7 +123,6 @@
             color: #556b2f;
             cursor: pointer;
             text-decoration: underline;
-            font-weight: 500;
         }
         
         .error-msg {
@@ -166,7 +157,7 @@
             opacity: 1;
         }
         
-        /* APP SCREEN */
+        /* APP */
         .app-screen {
             display: none;
         }
@@ -194,11 +185,6 @@
             gap: 1rem;
         }
         
-        .user-email {
-            font-size: 14px;
-            color: #6b7280;
-        }
-        
         .logout-btn {
             padding: 0.5rem 1rem;
             background: #556b2f;
@@ -206,18 +192,6 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 13px;
-        }
-        
-        .logout-btn:hover {
-            background: #475a1f;
-        }
-        
-        .header-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
         }
         
         .tabs {
@@ -235,7 +209,6 @@
             font-size: 14px;
             color: #9ca3af;
             border-bottom: 2px solid transparent;
-            transition: all 0.2s;
         }
         
         .tab-btn.active {
@@ -275,7 +248,6 @@
             font-size: 14px;
             font-weight: 500;
             margin-bottom: 0.5rem;
-            color: #3a3a35;
         }
         
         .form-group input,
@@ -290,11 +262,9 @@
         }
         
         .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group select:focus {
             outline: none;
             border-color: #556b2f;
-            box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.1);
         }
         
         .radio-group {
@@ -307,75 +277,13 @@
             align-items: center;
             gap: 0.5rem;
             margin: 0;
-            cursor: pointer;
-            font-weight: normal;
-        }
-        
-        .radio-group input[type="radio"] {
-            width: auto;
-            cursor: pointer;
-        }
-        
-        .dashboard {
-            display: grid;
-            gap: 1.5rem;
-        }
-        
-        .dashboard-card {
-            background: white;
-            border: 0.5px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-        
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #3a3a35;
-            margin-bottom: 1rem;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-        
-        .stat-card {
-            background: #fafaf8;
-            padding: 1rem;
-            border-radius: 8px;
-            border: 0.5px solid #e5e7eb;
-        }
-        
-        .stat-label {
-            font-size: 12px;
-            color: #6b7280;
-            margin-bottom: 0.5rem;
-        }
-        
-        .stat-value {
-            font-size: 20px;
-            font-weight: 600;
-            color: #556b2f;
-        }
-        
-        .budget-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
         }
         
         .budget-item {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-        }
-        
-        .budget-item-name {
-            font-size: 13px;
-            font-weight: 500;
-            color: #3a3a35;
+            margin-bottom: 1rem;
         }
         
         .budget-progress {
@@ -388,8 +296,6 @@
         .budget-progress-bar {
             height: 100%;
             background: #5ca61d;
-            border-radius: 4px;
-            transition: width 0.3s;
         }
         
         .budget-progress-bar.over-budget {
@@ -403,89 +309,33 @@
             color: #6b7280;
         }
         
-        .expense-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        
-        .expense-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            background: #fafaf8;
-            border-radius: 8px;
+        .dashboard-card {
+            background: white;
             border: 0.5px solid #e5e7eb;
-            font-size: 13px;
-        }
-        
-        .expense-description {
-            flex: 1;
-        }
-        
-        .expense-amount {
-            font-weight: 600;
-            color: #556b2f;
-        }
-        
-        .expense-badge {
-            background: #e5e7eb;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 11px;
-            margin-left: 0.5rem;
-        }
-        
-        .budget-edits {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .budget-edit-section h3 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #3a3a35;
-        }
-        
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            color: #6b7280;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
         
         @media (max-width: 768px) {
             .form-row {
                 grid-template-columns: 1fr;
             }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 1rem;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- LOGIN SCREEN -->
+    <!-- LOGIN -->
     <div id="loginScreen" class="login-screen active">
         <div class="login-box">
             <h1>Wealth Management</h1>
-            <p>Sincroniza tus finanzas en todos los dispositivos</p>
+            <p>Sincroniza tus finanzas</p>
             
             <div class="error-msg" id="errorMsg"></div>
             
             <div id="loginForm" class="login-form">
                 <div class="form-group">
-                    <label>Correo electrónico</label>
+                    <label>Correo</label>
                     <input type="email" id="loginEmail" placeholder="tu@email.com" required>
                 </div>
                 <div class="form-group">
@@ -495,57 +345,68 @@
                 <button type="button" class="button primary" onclick="handleLogin()">Inicia sesión</button>
                 
                 <div class="toggle-auth">
-                    ¿No tienes cuenta? <button onclick="toggleAuthForm()">Regístrate aquí</button>
+                    ¿No tienes cuenta? <button type="button" onclick="toggleAuthForm()">Regístrate</button>
                 </div>
             </div>
             
             <div id="registerForm" class="login-form" style="display: none;">
                 <div class="form-group">
-                    <label>Correo electrónico</label>
+                    <label>Correo</label>
                     <input type="email" id="registerEmail" placeholder="tu@email.com" required>
                 </div>
                 <div class="form-group">
-                    <label>Contraseña (mínimo 6 caracteres)</label>
+                    <label>Contraseña</label>
                     <input type="password" id="registerPassword" placeholder="••••••••" required>
                 </div>
                 <div class="form-group">
-                    <label>Confirmar contraseña</label>
+                    <label>Confirmar</label>
                     <input type="password" id="registerConfirm" placeholder="••••••••" required>
                 </div>
                 <button type="button" class="button primary" onclick="handleRegister()">Crear cuenta</button>
                 
                 <div class="toggle-auth">
-                    ¿Ya tienes cuenta? <button onclick="toggleAuthForm()">Inicia sesión</button>
+                    ¿Ya tienes cuenta? <button type="button" onclick="toggleAuthForm()">Inicia sesión</button>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- APP SCREEN -->
+    <!-- APP -->
     <div id="appScreen" class="app-screen">
         <div class="container">
             <div class="header">
-                <h1>Wealth Management 71427321893</h1>
+                <h1>Wealth Management</h1>
                 <div class="user-info">
-                    <span class="user-email" id="userEmail"></span>
-                    <button class="logout-btn" onclick="handleLogout()">Cerrar sesión</button>
+                    <span id="userEmail" style="color: #6b7280;"></span>
+                    <button class="logout-btn" onclick="handleLogout()">Salir</button>
                 </div>
             </div>
             
             <div class="success-msg" id="successMsg"></div>
             
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('expenses')">Registrar Gasto</button>
+                <button class="tab-btn active" onclick="switchTab('expenses')">Registrar</button>
                 <button class="tab-btn" onclick="switchTab('dashboard')">Dashboard</button>
-                <button class="tab-btn" onclick="switchTab('allExpenses')">Todos los Gastos</button>
+                <button class="tab-btn" onclick="switchTab('allExpenses')">Todos</button>
                 <button class="tab-btn" onclick="switchTab('reembolsos')">Reembolsos</button>
                 <button class="tab-btn" onclick="switchTab('budgets')">Presupuestos</button>
             </div>
             
-            <!-- TAB: REGISTRAR GASTO -->
+            <!-- REGISTRAR -->
             <div id="expenses" class="tab-content active">
+                <!-- EXCEL -->
+                <div class="form-section" style="background: #f0fdf4; border: 1px solid #86efac;">
+                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1rem; color: #059669;">📤 Carga Masiva</h2>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <input type="file" id="excelFile" accept=".xlsx,.xls" style="flex: 1; padding: 0.75rem; border: 1px solid #10b981; border-radius: 8px;">
+                        <button type="button" class="button primary" onclick="handleExcelUpload()" style="width: auto;">Cargar</button>
+                    </div>
+                    <div id="excelStatus" style="color: #059669; font-size: 13px; margin-top: 0.5rem;"></div>
+                </div>
+                
+                <!-- FORM -->
                 <div class="form-section">
-                    <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1.5rem;">Nuevo Gasto</h2>
+                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Nuevo Gasto</h2>
                     
                     <form id="expenseForm">
                         <div class="form-row">
@@ -557,7 +418,6 @@
                                     <option value="Fer">Fer</option>
                                 </select>
                             </div>
-                            
                             <div class="form-group">
                                 <label>Categoría *</label>
                                 <select id="category" required onchange="updateSubcategories()">
@@ -572,10 +432,9 @@
                             <div class="form-group">
                                 <label>Subcategoría *</label>
                                 <select id="subcategory" required>
-                                    <option value="">Selecciona categoría primero</option>
+                                    <option value="">Selecciona categoría</option>
                                 </select>
                             </div>
-                            
                             <div class="form-group">
                                 <label>Monto ($) *</label>
                                 <input type="number" id="amount" required min="0" step="0.01" placeholder="0.00">
@@ -585,20 +444,15 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Mes *</label>
-                                <select id="expenseMonth" required>
-                                    <option value="">Selecciona mes</option>
-                                </select>
+                                <select id="expenseMonth" required></select>
                             </div>
-                            
                             <div class="form-group">
                                 <label>Fecha *</label>
-                                <input type="date" id="date" required>
+                                <input type="date" id="date" required onchange="updateMonthFromDate()">
                             </div>
                         </div>
                         
                         <div class="form-row">
-                            <div class="form-group" style="grid-column: 1;"></div>
-                            
                             <div class="form-group">
                                 <label>Medio de pago</label>
                                 <select id="paymentMethod">
@@ -607,15 +461,14 @@
                                     <option value="Transferencia">Transferencia</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <input type="text" id="description">
+                            </div>
                         </div>
                         
                         <div class="form-group">
-                            <label>Descripción</label>
-                            <textarea id="description" placeholder="Detalles del gasto..." style="min-height: 80px; resize: vertical;"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>¿Gasto compartido? *</label>
+                            <label>¿Compartido? *</label>
                             <div class="radio-group">
                                 <label><input type="radio" name="isShared" value="Si" onchange="updateParticipation()"> Sí</label>
                                 <label><input type="radio" name="isShared" value="No" onchange="updateParticipation()"> No</label>
@@ -625,168 +478,125 @@
                         <div class="form-group">
                             <label>Participación *</label>
                             <div class="radio-group" id="participationGroup">
-                                <p style="color: #6b7280; font-size: 13px;">Selecciona si es compartido primero</p>
+                                <p style="color: #6b7280; font-size: 13px;">Selecciona compartido primero</p>
                             </div>
                         </div>
                         
-                        <button type="submit" class="button primary" style="width: 100%; margin-top: 1rem;">Registrar Gasto</button>
+                        <button type="submit" class="button primary" style="width: 100%;">Registrar</button>
                     </form>
-                </div>
-                
-                <div class="form-section">
-                    <h3 style="font-size: 16px; font-weight: 500; margin-bottom: 1rem;">Últimos gastos registrados</h3>
-                    <div id="recentExpenses" class="expense-list"></div>
                 </div>
             </div>
             
-            <!-- TAB: DASHBOARD -->
+            <!-- DASHBOARD -->
             <div id="dashboard" class="tab-content">
-                <div class="form-section" style="margin-bottom: 1.5rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <label for="dashboardMonth" style="font-weight: 500; margin: 0;">Filtrar por Mes:</label>
-                        <select id="dashboardMonth" onchange="updateDashboard()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; min-width: 200px;">
-                            <option value="">Selecciona mes</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="insightsContainer" style="padding: 1.25rem; background: linear-gradient(135deg, #f0fdf4 0%, #f0f9ff 100%); border-radius: 12px; border: 0.5px solid #d1fae5; margin-bottom: 2rem; display: none;">
-                    <div style="display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: center;">
-                        <span style="font-size: 20px;">✨</span>
-                        <h3 style="font-size: 15px; font-weight: 500; margin: 0; color: #065f46;">Insights del Mes</h3>
-                    </div>
-                    <div id="insightsContent" style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 14px; color: #1f2937;"></div>
-                </div>
-
                 <div style="background: linear-gradient(135deg, #556b2f 0%, #6b8e23 100%); padding: 2rem; border-radius: 12px; color: white; margin-bottom: 2rem;">
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: center;">
                         <div>
-                            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Compartido</div>
-                            <div style="font-size: 48px; font-weight: 500; margin-bottom: 0.5rem;" id="dashboardSharedPct">0%</div>
-                            <div style="font-size: 12px; opacity: 0.85;">$<span id="dashboardSharedSpent">0.00</span> / $<span id="dashboardSharedBudget">0.00</span></div>
+                            <div style="font-size: 12px; opacity: 0.9;">COMPARTIDO</div>
+                            <div style="font-size: 36px; font-weight: 500; margin: 0.5rem 0;" id="dashboardSharedPct">0%</div>
+                            <div style="font-size: 12px; opacity: 0.85;">$<span id="dashboardSharedSpent">0</span> / $<span id="dashboardSharedBudget">0</span></div>
                         </div>
                         <div style="border-left: 1px solid rgba(255,255,255,0.2); border-right: 1px solid rgba(255,255,255,0.2);">
-                            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Anto</div>
-                            <div style="font-size: 48px; font-weight: 500; margin-bottom: 0.5rem;" id="dashboardAntoPct">0%</div>
-                            <div style="font-size: 12px; opacity: 0.85;">$<span id="dashboardAntoSpent">0.00</span> / $<span id="dashboardAntoBudget">0.00</span></div>
+                            <div style="font-size: 12px; opacity: 0.9;">ANTO</div>
+                            <div style="font-size: 36px; font-weight: 500; margin: 0.5rem 0;" id="dashboardAntoPct">0%</div>
+                            <div style="font-size: 12px; opacity: 0.85;">$<span id="dashboardAntoSpent">0</span> / $<span id="dashboardAntoBudget">0</span></div>
                         </div>
                         <div>
-                            <div style="font-size: 13px; opacity: 0.9; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Fer</div>
-                            <div style="font-size: 48px; font-weight: 500; margin-bottom: 0.5rem;" id="dashboardFerPct">0%</div>
-                            <div style="font-size: 12px; opacity: 0.85;">$<span id="dashboardFerSpent">0.00</span> / $<span id="dashboardFerBudget">0.00</span></div>
+                            <div style="font-size: 12px; opacity: 0.9;">FER</div>
+                            <div style="font-size: 36px; font-weight: 500; margin: 0.5rem 0;" id="dashboardFerPct">0%</div>
+                            <div style="font-size: 12px; opacity: 0.85;">$<span id="dashboardFerSpent">0</span> / $<span id="dashboardFerBudget">0</span></div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="dashboard">
-                    <div class="dashboard-card">
-                        <div class="card-title">Gastos Compartidos</div>
-                        <div id="sharedBudget" class="budget-section"></div>
-                    </div>
-                    
-                    <div class="dashboard-card">
-                        <div class="card-title">Gastos de Anto</div>
-                        <div id="antoBudget" class="budget-section"></div>
-                    </div>
-                    
-                    <div class="dashboard-card">
-                        <div class="card-title">Gastos de Fer</div>
-                        <div id="ferBudget" class="budget-section"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- TAB: TODOS LOS GASTOS -->
-            <div id="allExpenses" class="tab-content">
-                <div class="form-section">
-                    <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1.5rem;">Todos los Gastos Registrados</h2>
-                    
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <label for="allExpensesMonth" style="font-weight: 500; margin: 0;">Filtrar por Mes:</label>
-                            <select id="allExpensesMonth" onchange="renderAllExpenses()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; min-width: 180px;">
-                                <option value="">Todos los meses</option>
-                            </select>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; gap: 0.75rem;">
-                            <label for="allExpensesResponsible" style="font-weight: 500; margin: 0;">Filtrar por Persona:</label>
-                            <select id="allExpensesResponsible" onchange="renderAllExpenses()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; min-width: 150px;">
-                                <option value="">Todos</option>
-                                <option value="Anto">Anto</option>
-                                <option value="Fer">Fer</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div style="background: #f9fafb; border-radius: 8px; border: 0.5px solid #e5e7eb; padding: 1rem; max-height: 600px; overflow-y: auto;">
-                        <div id="allExpensesContainer" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                            <p style="color: #6b7280; text-align: center; padding: 2rem;">Sin gastos registrados</p>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1rem; padding: 0.75rem; background: #f3f4f6; border-radius: 8px; font-size: 12px; color: #6b7280;">
-                        <strong>Total de gastos:</strong> <span id="totalExpensesCount">0</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- TAB: REEMBOLSOS -->
-            <div id="reembolsos" class="tab-content">
-                <div class="form-section" style="margin-bottom: 1.5rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <label for="reembolsosMonth" style="font-weight: 500; margin: 0;">Filtrar por Mes:</label>
-                        <select id="reembolsosMonth" onchange="renderReembolsos()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; min-width: 200px;">
-                            <option value="">Selecciona mes</option>
-                        </select>
                     </div>
                 </div>
                 
-                <div class="dashboard">
-                    <div class="dashboard-card">
-                        <div class="card-title">Reembolsos Pendientes</div>
-                        <div id="reembolsosContent" style="min-height: 200px;">
-                            <p style="color: #6b7280; text-align: center; padding: 2rem;">Sin reembolsos pendientes</p>
-                        </div>
+                <div style="margin-bottom: 2rem;">
+                    <label style="font-weight: 500; margin-right: 1rem;">Mes:</label>
+                    <select id="dashboardMonth" onchange="updateDashboard()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; min-width: 200px;"></select>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3 style="font-weight: 600; margin-bottom: 1rem;">Gastos Compartidos</h3>
+                    <div id="sharedBudget"></div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3 style="font-weight: 600; margin-bottom: 1rem;">Gastos de Anto</h3>
+                    <div id="antoBudget"></div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3 style="font-weight: 600; margin-bottom: 1rem;">Gastos de Fer</h3>
+                    <div id="ferBudget"></div>
+                </div>
+            </div>
+            
+            <!-- TODOS -->
+            <div id="allExpenses" class="tab-content">
+                <div class="form-section">
+                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Todos los Gastos</h2>
+                    
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                        <select id="allExpensesMonth" onchange="renderAllExpenses()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; min-width: 180px;"></select>
+                        <select id="allExpensesResponsible" onchange="renderAllExpenses()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; min-width: 150px;">
+                            <option value="">Todos</option>
+                            <option value="Anto">Anto</option>
+                            <option value="Fer">Fer</option>
+                        </select>
+                    </div>
+                    
+                    <div id="allExpensesContainer" style="max-height: 600px; overflow-y: auto;">
+                        <p style="color: #6b7280;">Sin gastos</p>
                     </div>
                 </div>
             </div>
             
-            <!-- TAB: PRESUPUESTOS -->
+            <!-- REEMBOLSOS -->
+            <div id="reembolsos" class="tab-content">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-weight: 500; margin-right: 1rem;">Mes:</label>
+                    <select id="reembolsosMonth" onchange="renderReembolsos()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; min-width: 200px;"></select>
+                </div>
+                
+                <div id="reembolsosContent" class="dashboard-card">
+                    <p style="color: #6b7280;">Sin reembolsos</p>
+                </div>
+            </div>
+            
+            <!-- PRESUPUESTOS -->
             <div id="budgets" class="tab-content">
                 <div class="form-section">
-                    <h2 style="font-size: 18px; font-weight: 500; margin-bottom: 1.5rem;">Editar Presupuestos</h2>
+                    <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Editar Presupuestos</h2>
                     
-                    <div class="budget-edits">
-                        <div class="budget-edit-section">
-                            <h3>Presupuestos Compartidos</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                        <div>
+                            <h3 style="font-weight: 600; margin-bottom: 1rem;">Compartidos</h3>
                             <div id="budgetEditsShared"></div>
                         </div>
                         
-                        <div class="budget-edit-section">
-                            <h3>Presupuestos de Anto</h3>
+                        <div>
+                            <h3 style="font-weight: 600; margin-bottom: 1rem;">Anto</h3>
                             <div id="budgetEditsAnto"></div>
                         </div>
                         
-                        <div class="budget-edit-section">
-                            <h3>Presupuestos de Fer</h3>
+                        <div>
+                            <h3 style="font-weight: 600; margin-bottom: 1rem;">Fer</h3>
                             <div id="budgetEditsFer"></div>
                         </div>
                     </div>
                     
-                    <button type="button" class="button primary" style="margin-top: 2rem;" onclick="saveBudgets()">Guardar Presupuestos</button>
+                    <button type="button" class="button primary" style="width: 100%;" onclick="saveBudgets()">Guardar</button>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Firebase SDKs - Versión Compatible -->
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
     
     <script>
-        // Firebase Configuration
+        // Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCu-nRuS0q2E9s9tWifszonupcDb2VfVO0",
             authDomain: "finanzas-familiares-5bda7.firebaseapp.com",
@@ -796,340 +606,38 @@
             appId: "1:823800796884:web:bbc1a019470f6b40c58d41"
         };
         
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         
-        // Asegurar persistencia de sesión
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-            .catch((error) => console.error('Persistence error:', error));
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         
-        // Utility Functions
-        function formatCurrency(value) {
-            return '$' + parseFloat(value).toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-        }
-        
-        // Funciones para manejo de meses
-        function getCurrentMonth() {
-            const today = new Date();
-            return today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
-        }
-        
-        function getMonthName(monthStr) {
-            const [year, month] = monthStr.split('-');
-            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-            return months[parseInt(month) - 1] + ' ' + year;
-        }
-        
-        function getAllMonths() {
-            const months = new Set();
-            expenses.forEach(exp => {
-                if (exp.month) months.add(exp.month);
-            });
-            return Array.from(months).sort().reverse();
-        }
-        
-        function populateMonthSelectors() {
-            const currentMonth = getCurrentMonth();
-            const allMonths = getAllMonths();
-            
-            // Agregar mes actual si no existe
-            if (!allMonths.includes(currentMonth)) {
-                allMonths.unshift(currentMonth);
-            }
-            
-            // Actualizar selector de registro
-            const expenseMonthSelect = document.getElementById('expenseMonth');
-            expenseMonthSelect.innerHTML = '<option value="">Selecciona mes</option>';
-            allMonths.forEach(month => {
-                const option = document.createElement('option');
-                option.value = month;
-                option.textContent = getMonthName(month);
-                expenseMonthSelect.appendChild(option);
-            });
-            expenseMonthSelect.value = currentMonth;
-            
-            // Actualizar selector del dashboard
-            const dashboardMonthSelect = document.getElementById('dashboardMonth');
-            dashboardMonthSelect.innerHTML = '<option value="">Todos los meses</option>';
-            allMonths.forEach(month => {
-                const option = document.createElement('option');
-                option.value = month;
-                option.textContent = getMonthName(month);
-                dashboardMonthSelect.appendChild(option);
-            });
-            dashboardMonthSelect.value = currentMonth;
-            
-            // Actualizar selector de Todos los Gastos
-            const allExpensesMonthSelect = document.getElementById('allExpensesMonth');
-            allExpensesMonthSelect.innerHTML = '<option value="">Todos los meses</option>';
-            allMonths.forEach(month => {
-                const option = document.createElement('option');
-                option.value = month;
-                option.textContent = getMonthName(month);
-                allExpensesMonthSelect.appendChild(option);
-            });
-            
-            // Actualizar selector de reembolsos - CAMBIADO: ahora usa mes actual por defecto
-            const reembolsosMonthSelect = document.getElementById('reembolsosMonth');
-            reembolsosMonthSelect.innerHTML = '<option value="">Todos los meses</option>';
-            allMonths.forEach(month => {
-                const option = document.createElement('option');
-                option.value = month;
-                option.textContent = getMonthName(month);
-                reembolsosMonthSelect.appendChild(option);
-            });
-            // Establecer mes actual como valor por defecto
-            if (allMonths.includes(currentMonth)) {
-                reembolsosMonthSelect.value = currentMonth;
-            }
-        }
-        
-        // Función para generar insights con Claude API
-        async function generateInsights() {
-            const currentMonth = getCurrentMonth();
-            const container = document.getElementById('insightsContainer');
-            const contentDiv = document.getElementById('insightsContent');
-            
-            try {
-                // Preparar datos del mes actual
-                const monthExpenses = expenses.filter(exp => exp.month === currentMonth);
-                
-                // Si no hay gastos en el mes, ocultar
-                if (monthExpenses.length === 0) {
-                    container.style.display = 'none';
-                    return;
-                }
-                
-                const totalShared = calculateSharedExpenses(currentMonth);
-                const totalAnto = calculateExpensesByPerson('Anto', currentMonth);
-                const totalFer = calculateExpensesByPerson('Fer', currentMonth);
-                
-                const totalBudgetShared = Object.values(budgetsShared).reduce((sum, b) => sum + b, 0);
-                const totalBudgetAnto = Object.values(budgetsAnto).reduce((sum, b) => sum + b, 0);
-                const totalBudgetFer = Object.values(budgetsFer).reduce((sum, b) => sum + b, 0);
-                
-                // Mostrar estado de carga
-                container.style.display = 'block';
-                contentDiv.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #065f46;">
-                        <span style="animation: spin 1s linear infinite; display: inline-block;">⏳</span>
-                        <span>Analizando gastos del mes...</span>
-                    </div>
-                `;
-                
-                // Construir prompt para Claude
-                const prompt = `Analiza estos gastos familiares y proporciona 3-4 insights clave en formato de bullets. Sé conciso y accionable.
-
-DATOS DEL MES (${getMonthName(currentMonth)}):
-- Gastos Compartidos: $${totalShared.toFixed(2)} / $${totalBudgetShared.toFixed(2)} presupuesto
-- Gastos Anto: $${totalAnto.toFixed(2)} / $${totalBudgetAnto.toFixed(2)} presupuesto  
-- Gastos Fer: $${totalFer.toFixed(2)} / $${totalBudgetFer.toFixed(2)} presupuesto
-- Total gastos: ${monthExpenses.length} transacciones
-
-TRANSACCIONES:
-${monthExpenses.slice(-15).map(exp => `• ${exp.subcategory} (${exp.responsible}): $${exp.amount.toFixed(2)} - ${exp.participation}`).join('\n')}
-
-Proporciona insights en este formato (máximo 4 líneas):
-• [Insight 1]
-• [Insight 2]
-• [Insight 3]
-• [Insight 4 - opcional]
-
-Sé específico con números y categorías.`;
-
-                // Llamar a una edge function en Vercel que tiene la API key segura
-                const response = await fetch('/api/generate-insights', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        prompt: prompt
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                const insight = data.insight;
-
-                // Renderizar insights
-                const lines = insight.split('\n').filter(line => line.trim().startsWith('•')).slice(0, 4);
-                
-                if (lines.length > 0) {
-                    contentDiv.innerHTML = lines.map(line => `
-                        <div style="display: flex; gap: 0.75rem;">
-                            <span style="color: #059669; font-weight: 600; flex-shrink: 0;">•</span>
-                            <span style="color: #1f2937;">${line.replace(/^•\s*/, '').trim()}</span>
-                        </div>
-                    `).join('');
-                    container.style.display = 'block';
-                } else {
-                    container.style.display = 'none';
-                }
-            } catch (error) {
-                console.error('Error generating insights:', error);
-                container.style.display = 'none';
-            }
-        }
-        
-        // Calcular gastos totales por persona
-        function calculateExpensesByPerson(person, filterMonth = null) {
-            let total = 0;
-            
-            expenses.forEach(exp => {
-                // Filtrar por mes si se especifica
-                if (filterMonth && exp.month !== filterMonth) return;
-                
-                if (exp.isShared === 'Si') {
-                    // Gastos compartidos
-                    if (exp.participation === '50-50') {
-                        total += exp.amount / 2;
-                    } else if (exp.participation.includes(person)) {
-                        // Ej: "Anto 100%" o "Fer 100%"
-                        total += exp.amount;
-                    }
-                } else {
-                    // Gastos individuales - solo si es del responsable
-                    if (exp.responsible === person) {
-                        total += exp.amount;
-                    }
-                }
-            });
-            
-            return total;
-        }
-        
-        // Calcular gastos compartidos totales (solo las subcategorías específicas)
-        function calculateSharedExpenses(filterMonth = null) {
-            const sharedSubcategories = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis', 'Viajes'];
-            let total = 0;
-            
-            expenses.forEach(exp => {
-                // Filtrar por mes si se especifica
-                if (filterMonth && exp.month !== filterMonth) return;
-                
-                if (exp.isShared === 'Si' && sharedSubcategories.includes(exp.subcategory)) {
-                    total += exp.amount;
-                }
-            });
-            
-            return total;
-        }
-        
-        // Calcular reembolsos
-        function calculateReembolsos() {
-            const reembolsos = {
-                antoToDferAmount: 0,  // Anto debe pagarle a Fer
-                ferToantoAmount: 0    // Fer debe pagarle a Anto
-            };
-            
-            expenses.forEach(exp => {
-                if (exp.isShared === 'No' && exp.participation === 'Individual') {
-                    // Gasto individual registrado por alguien pero 100% de otro
-                    if (exp.participation === 'Anto 100%' && exp.responsible === 'Fer') {
-                        reembolsos.antoToDferAmount += exp.amount;
-                    } else if (exp.participation === 'Fer 100%' && exp.responsible === 'Anto') {
-                        reembolsos.ferToantoAmount += exp.amount;
-                    }
-                }
-            });
-            
-            return reembolsos;
-        }
-        
-        // State
         let currentUser = null;
         let expenses = [];
-        let budgetsShared = {
-            'Agua': 50,
-            'Alquiler': 1500,
-            'Atlas y Ares': 200,
-            'Equipamiento casa': 100,
-            'Luz': 80,
-            'Limpieza': 100,
-            'Internet + Celulares': 80,
-            'Gas': 50,
-            'Supermercado': 400,
-            'Taxis': 150
-        };
+        let budgetsShared = {'Agua': 50, 'Alquiler': 1500, 'Atlas y Ares': 200, 'Equipamiento casa': 100, 'Luz': 80, 'Limpieza': 100, 'Internet + Celulares': 80, 'Gas': 50, 'Supermercado': 400, 'Taxis': 150};
+        let budgetsAnto = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100};
+        let budgetsFer = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100};
         
-        let budgetsAnto = {
-            'Social': 250,
-            'Deporte': 200,
-            'Peluquería': 80,
-            'Streaming / Suscripciones': 50,
-            'Transporte público': 100,
-            'Psicólogo': 120,
-            'Salud': 150,
-            'Ropa': 200,
-            'Viajes': 300,
-            'Varios': 100
-        };
+        const categories = {'Gastos fijos': ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'], 'Gastos variables': ['Deporte', 'Peluquería', 'Psicólogo', 'Ropa', 'Salud', 'Social', 'Streaming / Suscripciones', 'Transporte público', 'Varios', 'Supermercado', 'Taxis', 'Viajes']};
         
-        let budgetsFer = {
-            'Social': 250,
-            'Deporte': 200,
-            'Peluquería': 80,
-            'Streaming / Suscripciones': 50,
-            'Transporte público': 100,
-            'Psicólogo': 120,
-            'Salud': 150,
-            'Ropa': 200,
-            'Viajes': 300,
-            'Varios': 100
-        };
-        
-        const categoriesData = {
-            'Gastos fijos': ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'],
-            'Gastos variables': ['Deporte', 'Peluquería', 'Psicólogo', 'Ropa', 'Salud', 'Social', 'Streaming / Suscripciones', 'Transporte público', 'Varios', 'Supermercado', 'Taxis', 'Viajes']
-        };
-        
-        // Auth State Observer
+        // Auth
         auth.onAuthStateChanged((user) => {
-            console.log('Auth state changed:', user ? user.email : 'no user');
-            
-            const loginScreen = document.getElementById('loginScreen');
-            const appScreen = document.getElementById('appScreen');
-            
             if (user) {
                 currentUser = user;
-                console.log('Showing app screen for:', user.email);
-                
-                // Mostrar app, ocultar login
-                loginScreen.classList.remove('active');
-                appScreen.classList.add('active');
-                
+                document.getElementById('loginScreen').classList.remove('active');
+                document.getElementById('appScreen').classList.add('active');
                 document.getElementById('userEmail').textContent = user.email;
-                
-                // Pequeño delay para asegurar que el DOM está listo
-                setTimeout(() => {
-                    loadUserData();
-                    setupRealtimeListener();
-                }, 500);
+                loadUserData();
             } else {
                 currentUser = null;
-                console.log('Showing login screen');
-                
-                // Mostrar login, ocultar app
-                loginScreen.classList.add('active');
-                appScreen.classList.remove('active');
+                document.getElementById('loginScreen').classList.add('active');
+                document.getElementById('appScreen').classList.remove('active');
             }
         });
         
-        // Authentication Functions
         function toggleAuthForm() {
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            loginForm.style.display = loginForm.style.display === 'none' ? 'flex' : 'none';
-            registerForm.style.display = registerForm.style.display === 'none' ? 'flex' : 'none';
+            document.getElementById('loginForm').style.display = document.getElementById('loginForm').style.display === 'none' ? 'flex' : 'none';
+            document.getElementById('registerForm').style.display = document.getElementById('registerForm').style.display === 'none' ? 'flex' : 'none';
         }
         
         function handleLogin() {
@@ -1137,29 +645,11 @@ Sé específico con números y categorías.`;
             const password = document.getElementById('loginPassword').value;
             
             if (!email || !password) {
-                showError('Por favor completa todos los campos');
+                showError('Completa todos los campos');
                 return;
             }
             
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    console.log('Login exitoso:', userCredential.user.email);
-                    showSuccess('Bienvenido ' + userCredential.user.email);
-                })
-                .catch((error) => {
-                    console.error('Error de login:', error.code, error.message);
-                    let mensaje = 'Error al iniciar sesión';
-                    
-                    if (error.code === 'auth/user-not-found') {
-                        mensaje = 'Usuario no encontrado';
-                    } else if (error.code === 'auth/wrong-password') {
-                        mensaje = 'Contraseña incorrecta';
-                    } else if (error.code === 'auth/invalid-email') {
-                        mensaje = 'Email inválido';
-                    }
-                    
-                    showError(mensaje);
-                });
+            auth.signInWithEmailAndPassword(email, password).catch(err => showError(err.message));
         }
         
         function handleRegister() {
@@ -1168,214 +658,53 @@ Sé específico con números y categorías.`;
             const confirm = document.getElementById('registerConfirm').value;
             
             if (!email || !password || !confirm) {
-                showError('Por favor completa todos los campos');
+                showError('Completa todos los campos');
                 return;
             }
-            
             if (password !== confirm) {
                 showError('Las contraseñas no coinciden');
                 return;
             }
-            
             if (password.length < 6) {
-                showError('La contraseña debe tener al menos 6 caracteres');
+                showError('Mínimo 6 caracteres');
                 return;
             }
             
             auth.createUserWithEmailAndPassword(email, password)
                 .then(() => {
-                    showSuccess('Cuenta creada exitosamente');
-                    setTimeout(() => {
-                        document.getElementById('registerForm').style.display = 'none';
-                        document.getElementById('loginForm').style.display = 'flex';
-                    }, 1500);
+                    showSuccess('Cuenta creada');
+                    setTimeout(() => toggleAuthForm(), 1500);
                 })
-                .catch((error) => showError(error.message));
+                .catch(err => showError(err.message));
         }
         
         function handleLogout() {
             auth.signOut();
         }
         
-        // Firestore Functions
         function loadUserData() {
-            db.collection('users').doc(currentUser.uid).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        expenses = data.expenses || [];
-                        budgetsShared = { ...budgetsShared, ...data.budgetsShared };
-                        budgetsAnto = { ...budgetsAnto, ...data.budgetsAnto };
-                        budgetsFer = { ...budgetsFer, ...data.budgetsFer };
-                    }
-                    
-                    // Asegurar que Viajes existe SOLO en Anto y Fer
-                    if (!budgetsAnto.hasOwnProperty('Viajes')) {
-                        budgetsAnto['Viajes'] = 300;
-                    }
-                    if (!budgetsFer.hasOwnProperty('Viajes')) {
-                        budgetsFer['Viajes'] = 300;
-                    }
-                    
-                    // Remover Viajes de compartido si existe
-                    if (budgetsShared.hasOwnProperty('Viajes')) {
-                        delete budgetsShared['Viajes'];
-                    }
-                    
-                    // Guardar la migración si fue necesaria
-                    saveUserData();
-                    
-                    populateMonthSelectors();
-                    updateDashboard();
-                    renderAllExpenses();
-                    generateInsights();
-                    renderBudgetEdits();
-                    document.getElementById('expenseForm').addEventListener('submit', handleAddExpense);
-                    setDefaultDate();
-                });
-        }
-        
-        function setupRealtimeListener() {
-            db.collection('users').doc(currentUser.uid).onSnapshot((doc) => {
+            db.collection('users').doc(currentUser.uid).get().then(doc => {
                 if (doc.exists) {
-                    const data = doc.data();
-                    expenses = data.expenses || [];
-                    budgetsShared = { ...budgetsShared, ...data.budgetsShared };
-                    budgetsAnto = { ...budgetsAnto, ...data.budgetsAnto };
-                    budgetsFer = { ...budgetsFer, ...data.budgetsFer };
-                    updateDashboard();
+                    expenses = doc.data().expenses || [];
+                    budgetsShared = { ...budgetsShared, ...doc.data().budgetsShared };
+                    budgetsAnto = { ...budgetsAnto, ...doc.data().budgetsAnto };
+                    budgetsFer = { ...budgetsFer, ...doc.data().budgetsFer };
                 }
+                populateMonthSelectors();
+                updateDashboard();
+                renderBudgetEdits();
+                document.getElementById('expenseForm').addEventListener('submit', handleAddExpense);
+                setDefaultDate();
             });
         }
         
         function saveUserData() {
-            if (!currentUser) {
-                console.error('Error: No hay usuario logueado');
-                return;
-            }
-            
-            console.log('📤 Intentando guardar datos en Firebase...');
-            console.log('Gastos a guardar:', expenses.length);
-            
-            db.collection('users').doc(currentUser.uid).set({
-                expenses: expenses,
-                budgetsShared: budgetsShared,
-                budgetsAnto: budgetsAnto,
-                budgetsFer: budgetsFer,
-                lastUpdated: new Date()
-            }, { merge: true })
-            .then(() => {
-                console.log('✅ Datos guardados exitosamente en Firebase');
-                console.log('Total de gastos guardados:', expenses.length);
-            })
-            .catch((error) => {
-                console.error('❌ Error al guardar en Firebase:', error);
-                console.error('Código de error:', error.code);
-                console.error('Mensaje:', error.message);
-                showError('Error al guardar: ' + error.message);
-            });
+            if (!currentUser) return;
+            db.collection('users').doc(currentUser.uid).set({expenses, budgetsShared, budgetsAnto, budgetsFer}, {merge: true});
         }
         
-        // FUNCIÓN PÚBLICA PARA REGISTRAR GASTOS - PARA EL AGENTE
-        async function registerExpense(responsibleValue, categoryValue, subcategoryValue, amountValue, monthValue, dateValue, paymentMethodValue, descriptionValue, isSharedValue, participationValue) {
-            console.log('📝 registerExpense() LLAMADA DIRECTAMENTE');
-            console.log('Parámetros recibidos:', {
-                responsibleValue,
-                categoryValue,
-                subcategoryValue,
-                amountValue,
-                monthValue,
-                dateValue,
-                isSharedValue,
-                participationValue
-            });
-            
-            // Validar que el usuario esté logueado
-            if (!currentUser) {
-                console.error('❌ BLOQUEADO: No hay usuario logueado');
-                showError('❌ No hay usuario logueado');
-                return false;
-            }
-            
-            // Validar que todos los campos estén llenos
-            if (!responsibleValue || !categoryValue || !subcategoryValue || !amountValue || !monthValue || !dateValue || !isSharedValue || !participationValue) {
-                console.error('❌ BLOQUEADO: Campos vacíos');
-                console.error('Campos faltantes:', {
-                    responsibleValue: !responsibleValue,
-                    categoryValue: !categoryValue,
-                    subcategoryValue: !subcategoryValue,
-                    amountValue: !amountValue,
-                    monthValue: !monthValue,
-                    dateValue: !dateValue,
-                    isSharedValue: !isSharedValue,
-                    participationValue: !participationValue
-                });
-                showError('❌ Todos los campos son requeridos');
-                return false;
-            }
-            
-            console.log('✅ Validación completada');
-            
-            const expense = {
-                id: Date.now().toString(),
-                responsible: responsibleValue,
-                category: categoryValue,
-                subcategory: subcategoryValue,
-                amount: parseFloat(amountValue),
-                month: monthValue,
-                date: dateValue,
-                paymentMethod: paymentMethodValue || 'Efectivo',
-                description: descriptionValue || '',
-                isShared: isSharedValue,
-                participation: participationValue
-            };
-            
-            console.log('📦 Gasto creado:', expense);
-            
-            expenses.push(expense);
-            console.log('📊 Total gastos en memoria:', expenses.length);
-            
-            // Guardar en Firebase
-            console.log('💾 Guardando en Firebase...');
-            
-            try {
-                await db.collection('users').doc(currentUser.uid).set({
-                    expenses: expenses,
-                    budgetsShared: budgetsShared,
-                    budgetsAnto: budgetsAnto,
-                    budgetsFer: budgetsFer,
-                    lastUpdated: new Date()
-                }, { merge: true });
-                
-                console.log('✅ ÉXITO: Gasto guardado en Firebase');
-                console.log('Total de gastos guardados:', expenses.length);
-                
-                // Forzar actualización inmediata del UI
-                console.log('🔄 Actualizando UI...');
-                populateMonthSelectors();
-                updateDashboard();
-                renderAllExpenses();
-                renderRecentExpenses();
-                renderReembolsos();
-                
-                console.log('✅ UI actualizado');
-                showSuccess('✅ Gasto registrado: ' + expense.subcategory + ' - $' + expense.amount);
-                return true;
-            } catch (error) {
-                console.error('❌ ERROR AL GUARDAR:', error);
-                console.error('Error code:', error.code);
-                console.error('Error message:', error.message);
-                showError('❌ Error: ' + error.message);
-                expenses.pop(); // Remover el gasto si falló
-                return false;
-            }
-        }
-        
-        // Expense Functions
         function handleAddExpense(e) {
             e.preventDefault();
-            
-            console.log('📝 Registrando nuevo gasto...');
             
             const expense = {
                 id: Date.now().toString(),
@@ -1388,227 +717,165 @@ Sé específico con números y categorías.`;
                 paymentMethod: document.getElementById('paymentMethod').value,
                 description: document.getElementById('description').value,
                 isShared: document.querySelector('input[name="isShared"]:checked').value,
-                participation: document.querySelector('input[name="participation"]:checked')?.value || '50-50'
+                participation: document.querySelector('input[name="participation"]:checked').value
             };
             
-            console.log('Gasto creado:', expense);
-            
             expenses.push(expense);
-            console.log('Total de gastos en memoria:', expenses.length);
-            
-            // Guardar en Firebase
-            if (!currentUser) {
-                showError('Error: No hay usuario logueado');
-                return;
+            saveUserData();
+            showSuccess('✅ Gasto registrado');
+            document.getElementById('expenseForm').reset();
+            setDefaultDate();
+            updateDashboard();
+        }
+        
+        function updateMonthFromDate() {
+            const dateInput = document.getElementById('date').value;
+            if (dateInput) {
+                const [year, month] = dateInput.split('-');
+                document.getElementById('expenseMonth').value = year + '-' + month;
             }
-            
-            db.collection('users').doc(currentUser.uid).set({
-                expenses: expenses,
-                budgetsShared: budgetsShared,
-                budgetsAnto: budgetsAnto,
-                budgetsFer: budgetsFer,
-                lastUpdated: new Date()
-            }, { merge: true })
-            .then(() => {
-                console.log('✅ Gasto guardado exitosamente en Firebase');
-                showSuccess('✅ Gasto registrado correctamente');
-                
-                // Limpiar formulario después de éxito
-                document.getElementById('expenseForm').reset();
-                setDefaultDate();
-                populateMonthSelectors();
-                updateDashboard();
-                renderAllExpenses();
-                generateInsights();
-            })
-            .catch((error) => {
-                console.error('❌ Error al guardar:', error);
-                showError('❌ Error al guardar: ' + error.message);
-                // Remover el gasto del array si falló el guardado
-                expenses.pop();
-            });
         }
         
         function updateSubcategories() {
             const category = document.getElementById('category').value;
             const subcatSelect = document.getElementById('subcategory');
-            
             subcatSelect.innerHTML = '';
-            
-            if (!category) {
-                subcatSelect.innerHTML = '<option value="">Selecciona categoría primero</option>';
-                return;
+            if (category) {
+                categories[category].forEach(subcat => {
+                    const option = document.createElement('option');
+                    option.value = subcat;
+                    option.textContent = subcat;
+                    subcatSelect.appendChild(option);
+                });
             }
-            
-            const subcats = categoriesData[category] || [];
-            subcats.forEach(subcat => {
-                const option = document.createElement('option');
-                option.value = subcat;
-                option.textContent = subcat;
-                subcatSelect.appendChild(option);
-            });
         }
         
         function updateParticipation() {
-            const isShared = document.querySelector('input[name="isShared"]:checked')?.value;
+            const isShared = document.querySelector('input[name="isShared"]:checked').value;
             const participationGroup = document.getElementById('participationGroup');
-            
             participationGroup.innerHTML = '';
             
             if (isShared === 'Si') {
-                participationGroup.innerHTML = `
-                    <label><input type="radio" name="participation" value="50-50" checked> 50-50</label>
-                    <label><input type="radio" name="participation" value="Anto 100%"> Anto 100%</label>
-                    <label><input type="radio" name="participation" value="Fer 100%"> Fer 100%</label>
-                `;
-            } else if (isShared === 'No') {
-                participationGroup.innerHTML = `
-                    <label><input type="radio" name="participation" value="Individual" checked> Individual</label>
-                `;
+                participationGroup.innerHTML = '<label><input type="radio" name="participation" value="50-50" checked> 50-50</label><label><input type="radio" name="participation" value="Anto 100%"> Anto 100%</label><label><input type="radio" name="participation" value="Fer 100%"> Fer 100%</label>';
+            } else {
+                participationGroup.innerHTML = '<label><input type="radio" name="participation" value="Individual" checked> Individual</label>';
             }
+        }
+        
+        function populateMonthSelectors() {
+            const currentMonth = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
+            const allMonths = new Set();
+            const today = new Date();
+            
+            for (let i = 12; i > 0; i--) {
+                const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+                allMonths.add(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+            }
+            for (let i = 0; i < 12; i++) {
+                const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
+                allMonths.add(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+            }
+            expenses.forEach(exp => { if (exp.month) allMonths.add(exp.month); });
+            
+            const monthsArray = Array.from(allMonths).sort().reverse();
+            const months = {'01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril', '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto', '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre'};
+            
+            const selectors = ['expenseMonth', 'dashboardMonth', 'allExpensesMonth', 'reembolsosMonth'];
+            selectors.forEach(id => {
+                document.getElementById(id).innerHTML = '<option value="">Selecciona</option>';
+                monthsArray.forEach(month => {
+                    const option = document.createElement('option');
+                    option.value = month;
+                    const [year, monthNum] = month.split('-');
+                    option.textContent = months[monthNum] + ' ' + year;
+                    document.getElementById(id).appendChild(option);
+                });
+                if (id !== 'allExpensesMonth') document.getElementById(id).value = currentMonth;
+            });
         }
         
         function setDefaultDate() {
             const today = new Date();
-            const dateStr = today.toISOString().split('T')[0];
-            const monthStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
-            
-            document.getElementById('date').value = dateStr;
-            document.getElementById('expenseMonth').value = monthStr;
+            document.getElementById('date').value = today.toISOString().split('T')[0];
         }
         
-        // Dashboard Functions
         function updateDashboard() {
-            const filterMonth = document.getElementById('dashboardMonth')?.value || null;
-            
+            const filterMonth = document.getElementById('dashboardMonth').value || null;
             const sharedExpenses = calculateSharedExpenses(filterMonth);
             const antoExpenses = calculateExpensesByPerson('Anto', filterMonth);
             const ferExpenses = calculateExpensesByPerson('Fer', filterMonth);
-            
             const totalBudgetShared = Object.values(budgetsShared).reduce((sum, b) => sum + b, 0);
             const totalBudgetAnto = Object.values(budgetsAnto).reduce((sum, b) => sum + b, 0);
             const totalBudgetFer = Object.values(budgetsFer).reduce((sum, b) => sum + b, 0);
             
-            // Calcular porcentajes
-            const sharedPercentage = totalBudgetShared > 0 ? Math.round((sharedExpenses / totalBudgetShared) * 100) : 0;
-            const antoPercentage = totalBudgetAnto > 0 ? Math.round((antoExpenses / totalBudgetAnto) * 100) : 0;
-            const ferPercentage = totalBudgetFer > 0 ? Math.round((ferExpenses / totalBudgetFer) * 100) : 0;
-            
-            // Actualizar header del dashboard con formato correcto
-            document.getElementById('dashboardSharedPct').textContent = sharedPercentage + '%';
-            document.getElementById('dashboardSharedSpent').textContent = formatCurrency(sharedExpenses).replace('$', '');
-            document.getElementById('dashboardSharedBudget').textContent = formatCurrency(totalBudgetShared).replace('$', '');
-            
-            document.getElementById('dashboardAntoPct').textContent = antoPercentage + '%';
-            document.getElementById('dashboardAntoSpent').textContent = formatCurrency(antoExpenses).replace('$', '');
-            document.getElementById('dashboardAntoBudget').textContent = formatCurrency(totalBudgetAnto).replace('$', '');
-            
-            document.getElementById('dashboardFerPct').textContent = ferPercentage + '%';
-            document.getElementById('dashboardFerSpent').textContent = formatCurrency(ferExpenses).replace('$', '');
-            document.getElementById('dashboardFerBudget').textContent = formatCurrency(totalBudgetFer).replace('$', '');
+            document.getElementById('dashboardSharedPct').textContent = Math.round((sharedExpenses / totalBudgetShared) * 100) + '%';
+            document.getElementById('dashboardSharedSpent').textContent = sharedExpenses.toFixed(2);
+            document.getElementById('dashboardSharedBudget').textContent = totalBudgetShared.toFixed(2);
+            document.getElementById('dashboardAntoPct').textContent = Math.round((antoExpenses / totalBudgetAnto) * 100) + '%';
+            document.getElementById('dashboardAntoSpent').textContent = antoExpenses.toFixed(2);
+            document.getElementById('dashboardAntoBudget').textContent = totalBudgetAnto.toFixed(2);
+            document.getElementById('dashboardFerPct').textContent = Math.round((ferExpenses / totalBudgetFer) * 100) + '%';
+            document.getElementById('dashboardFerSpent').textContent = ferExpenses.toFixed(2);
+            document.getElementById('dashboardFerBudget').textContent = totalBudgetFer.toFixed(2);
             
             renderBudgetSection('sharedBudget', 'Compartido', budgetsShared, filterMonth);
             renderBudgetSection('antoBudget', 'Anto', budgetsAnto, filterMonth);
             renderBudgetSection('ferBudget', 'Fer', budgetsFer, filterMonth);
-            
-            renderRecentExpenses(filterMonth);
-            renderReembolsos();
+        }
+        
+        function calculateExpensesByPerson(person, filterMonth = null) {
+            let total = 0;
+            expenses.forEach(exp => {
+                if (filterMonth && exp.month !== filterMonth) return;
+                if (exp.isShared === 'Si') {
+                    if (exp.participation === '50-50') total += exp.amount / 2;
+                    else if (exp.participation.includes(person)) total += exp.amount;
+                } else {
+                    if (exp.responsible === person) total += exp.amount;
+                }
+            });
+            return total;
+        }
+        
+        function calculateSharedExpenses(filterMonth = null) {
+            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis'];
+            let total = 0;
+            expenses.forEach(exp => {
+                if (filterMonth && exp.month !== filterMonth) return;
+                if (exp.isShared === 'Si' && sharedSubs.includes(exp.subcategory)) total += exp.amount;
+            });
+            return total;
         }
         
         function renderBudgetSection(elementId, person, budgetObj, filterMonth = null) {
-            const container = document.getElementById(elementId);
+            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis'];
             let html = '';
-            
-            // Lista de subcategorías compartidas (solo para la sección Compartido)
-            const sharedSubcategoriesForDashboard = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis'];
             
             for (const [subcat, budget] of Object.entries(budgetObj)) {
                 let spent = 0;
-                
                 expenses.forEach(exp => {
-                    // Filtrar por mes si se especifica
                     if (filterMonth && exp.month !== filterMonth) return;
                     if (exp.subcategory !== subcat) return;
                     
                     if (person === 'Compartido') {
-                        // Para gastos compartidos: mostrar 100% del gasto en dashboard
-                        // SOLO si está en la lista de subcategorías compartidas
-                        if (exp.isShared === 'Si' && sharedSubcategoriesForDashboard.includes(exp.subcategory)) {
-                            spent += exp.amount;
-                        }
+                        if (exp.isShared === 'Si' && sharedSubs.includes(exp.subcategory)) spent += exp.amount;
                     } else {
-                        // Gastos que afectan a esta persona
                         if (exp.isShared === 'Si') {
-                            // Gasto compartido
-                            if (exp.participation === '50-50') {
-                                // Divide entre ambos
-                                spent += exp.amount / 2;
-                            } else if (exp.participation === person + ' 100%') {
-                                // 100% para esta persona (nuevo formato)
-                                spent += exp.amount;
-                            } else if (exp.participation.includes(person)) {
-                                // Compatibilidad con formato antiguo
-                                spent += exp.participation === '50-50' ? exp.amount / 2 : exp.amount;
-                            }
-                        } else {
-                            // Gasto individual - solo si es responsable
-                            if (exp.responsible === person) {
-                                spent += exp.amount;
-                            }
+                            if (exp.participation === '50-50') spent += exp.amount / 2;
+                            else if (exp.participation === person + ' 100%') spent += exp.amount;
+                        } else if (exp.responsible === person) {
+                            spent += exp.amount;
                         }
                     }
                 });
                 
                 const percentage = Math.min((spent / budget) * 100, 100);
                 const remaining = budget - spent;
-                const isOverBudget = spent > budget;
-                const barClass = isOverBudget ? 'budget-progress-bar over-budget' : 'budget-progress-bar';
+                const barClass = spent > budget ? 'budget-progress-bar over-budget' : 'budget-progress-bar';
                 
-                html += `
-                    <div class="budget-item">
-                        <div class="budget-item-name">${subcat}</div>
-                        <div class="budget-progress">
-                            <div class="${barClass}" style="width: ${Math.min(percentage, 100)}%"></div>
-                        </div>
-                        <div class="budget-stats">
-                            <span>${formatCurrency(spent)} / ${formatCurrency(budget)}</span>
-                            <span>${formatCurrency(Math.max(0, remaining))} disponible</span>
-                        </div>
-                    </div>
-                `;
+                html += `<div class="budget-item"><div style="font-size: 13px; font-weight: 500;">${subcat}</div><div class="budget-progress"><div class="${barClass}" style="width: ${Math.min(percentage, 100)}%"></div></div><div class="budget-stats"><span>$${spent.toFixed(2)} / $${budget.toFixed(2)}</span><span>$${Math.max(0, remaining).toFixed(2)}</span></div></div>`;
             }
-            
-            container.innerHTML = html || '<p style="color: #6b7280;">Sin presupuestos configurados</p>';
-        }
-        
-        function renderRecentExpenses(filterMonth = null) {
-            const container = document.getElementById('recentExpenses');
-            
-            let filtered = expenses;
-            if (filterMonth) {
-                filtered = expenses.filter(exp => exp.month === filterMonth);
-            }
-            
-            const recent = filtered.slice(-10).reverse();
-            
-            if (recent.length === 0) {
-                container.innerHTML = '<p style="color: #6b7280;">No hay gastos registrados</p>';
-                return;
-            }
-            
-            container.innerHTML = recent.map(exp => `
-                <div class="expense-item" style="position: relative; padding-right: 2.5rem;">
-                    <div class="expense-description">
-                        <div style="font-weight: 500;">${exp.subcategory}</div>
-                        <div style="color: #6b7280; font-size: 12px;">${exp.date} • ${exp.responsible}</div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span class="expense-amount">${formatCurrency(exp.amount)}</span>
-                        <span class="expense-badge">${exp.participation}</span>
-                        <button onclick="deleteExpense('${exp.id}')" style="background: #fee; color: #c33; border: none; border-radius: 4px; width: 24px; height: 24px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 14px;">×</button>
-                    </div>
-                </div>
-            `).join('');
+            document.getElementById(elementId).innerHTML = html;
         }
         
         function renderAllExpenses() {
@@ -1617,148 +884,126 @@ Sé específico con números y categorías.`;
             const filterResponsible = document.getElementById('allExpensesResponsible').value;
             
             let filtered = expenses;
-            
-            // Filtrar por mes SOLO si se selecciona un mes específico
-            if (filterMonth) {
-                filtered = filtered.filter(exp => exp.month === filterMonth);
-            }
-            
-            // Filtrar por responsable
-            if (filterResponsible) {
-                filtered = filtered.filter(exp => exp.responsible === filterResponsible);
-            }
-            
-            // Ordenar por fecha descendente (más reciente primero)
-            filtered = filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            // Actualizar contador total
-            document.getElementById('totalExpensesCount').textContent = filtered.length;
+            if (filterMonth) filtered = filtered.filter(exp => exp.month === filterMonth);
+            if (filterResponsible) filtered = filtered.filter(exp => exp.responsible === filterResponsible);
             
             if (filtered.length === 0) {
-                container.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 2rem;">No hay gastos que coincidan con los filtros</p>';
+                container.innerHTML = '<p style="color: #6b7280;">Sin gastos</p>';
                 return;
             }
             
-            // Renderizar todos los gastos (sin límite, pero con scroll en el contenedor)
-            const html = filtered.map(exp => `
-                <div class="expense-item" style="position: relative; padding-right: 2.5rem; padding: 1rem; background: white; border-radius: 8px; border: 0.5px solid #e5e7eb; flex-shrink: 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                        <div>
-                            <div style="font-weight: 600; color: #1f2937;">${exp.subcategory}</div>
-                            <div style="font-size: 13px; color: #6b7280;">${exp.category}</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 18px; font-weight: 600; color: #556b2f;">${formatCurrency(exp.amount)}</div>
-                            <div style="font-size: 12px; color: #6b7280;">${exp.date}</div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
-                        <span style="padding: 0.25rem 0.5rem; background: #f3f4f6; border-radius: 4px; font-size: 12px; color: #4b5563;">👤 ${exp.responsible}</span>
-                        <span style="padding: 0.25rem 0.5rem; background: #dbeafe; border-radius: 4px; font-size: 12px; color: #1e3a8a;">${exp.participation}</span>
-                        <span style="padding: 0.25rem 0.5rem; background: #fef3c7; border-radius: 4px; font-size: 12px; color: #92400e;">${exp.paymentMethod}</span>
-                    </div>
-                    
-                    ${exp.description ? `<div style="font-size: 13px; color: #6b7280; margin-bottom: 0.75rem; font-style: italic;">📝 ${exp.description}</div>` : ''}
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 0.5px solid #e5e7eb;">
-                        <span style="font-size: 12px; color: #9ca3af;">Mes: ${exp.month ? getMonthName(exp.month) : 'Sin mes (anterior)'}</span>
-                        <button onclick="deleteExpense('${exp.id}')" style="background: #fee; color: #c33; border: none; border-radius: 4px; width: 28px; height: 28px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;">×</button>
-                    </div>
-                </div>
-            `).join('');
-            
-            container.innerHTML = html;
+            container.innerHTML = filtered.map(exp => `<div style="padding: 1rem; background: #f9fafb; border-radius: 8px; margin-bottom: 0.75rem; display: flex; justify-content: space-between;"><div><div style="font-weight: 600;">${exp.subcategory}</div><div style="font-size: 12px; color: #6b7280;">${exp.date} • ${exp.responsible}</div></div><div style="text-align: right;"><div style="font-weight: 600; color: #556b2f;">$${exp.amount.toFixed(2)}</div><button onclick="deleteExpense('${exp.id}')" style="background: #fee; color: #c33; border: none; border-radius: 4px; width: 24px; height: 24px; margin-top: 0.25rem; cursor: pointer;">×</button></div></div>`).join('');
         }
         
         function deleteExpense(expenseId) {
-            if (confirm('¿Estás seguro de que quieres eliminar este gasto?')) {
+            if (confirm('¿Eliminar?')) {
                 expenses = expenses.filter(exp => exp.id !== expenseId);
                 saveUserData();
                 updateDashboard();
                 renderAllExpenses();
-                renderRecentExpenses();
-                showSuccess('Gasto eliminado correctamente');
             }
         }
         
-        // Budget Functions
+        function renderReembolsos() {
+            const container = document.getElementById('reembolsosContent');
+            const filterMonth = document.getElementById('reembolsosMonth').value;
+            
+            let antoDebeAFer = 0;
+            let ferDebeAAnto = 0;
+            
+            expenses.forEach(exp => {
+                if (filterMonth && exp.month !== filterMonth) return;
+                if (exp.responsible === 'Fer') {
+                    if (exp.isShared === 'Si' && exp.participation === '50-50') antoDebeAFer += exp.amount * 0.5;
+                    else if (exp.participation === 'Anto 100%') antoDebeAFer += exp.amount;
+                } else if (exp.responsible === 'Anto') {
+                    if (exp.isShared === 'Si' && exp.participation === '50-50') ferDebeAAnto += exp.amount * 0.5;
+                    else if (exp.participation === 'Fer 100%') ferDebeAAnto += exp.amount;
+                }
+            });
+            
+            if (antoDebeAFer === 0 && ferDebeAAnto === 0) {
+                container.innerHTML = '<p style="color: #6b7280;">✓ Sin reembolsos</p>';
+                return;
+            }
+            
+            let html = '';
+            if (antoDebeAFer > 0) html += `<div style="padding: 1rem; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; margin-bottom: 1rem;"><div style="font-weight: 600;">Anto debe a Fer</div><div style="font-size: 24px; font-weight: 700; color: #d97706;">$${antoDebeAFer.toFixed(2)}</div></div>`;
+            if (ferDebeAAnto > 0) html += `<div style="padding: 1rem; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 8px;"><div style="font-weight: 600;">Fer debe a Anto</div><div style="font-size: 24px; font-weight: 700; color: #1d4ed8;">$${ferDebeAAnto.toFixed(2)}</div></div>`;
+            
+            container.innerHTML = html;
+        }
+        
         function renderBudgetEdits() {
-            const sharedContainer = document.getElementById('budgetEditsShared');
-            const antoContainer = document.getElementById('budgetEditsAnto');
-            const ferContainer = document.getElementById('budgetEditsFer');
-            
-            let sharedHtml = '';
-            let antoHtml = '';
-            let ferHtml = '';
-            
-            for (const [subcat, budget] of Object.entries(budgetsShared)) {
-                sharedHtml += `
-                    <div class="form-group">
-                        <label>${subcat}</label>
-                        <input type="number" class="budget-input-shared" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
-                    </div>
-                `;
-            }
-            
-            for (const [subcat, budget] of Object.entries(budgetsAnto)) {
-                antoHtml += `
-                    <div class="form-group">
-                        <label>${subcat}</label>
-                        <input type="number" class="budget-input-anto" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
-                    </div>
-                `;
-            }
-            
-            for (const [subcat, budget] of Object.entries(budgetsFer)) {
-                ferHtml += `
-                    <div class="form-group">
-                        <label>${subcat}</label>
-                        <input type="number" class="budget-input-fer" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
-                    </div>
-                `;
-            }
-            
-            sharedContainer.innerHTML = sharedHtml || '<p style="color: #6b7280;">Sin presupuestos compartidos</p>';
-            antoContainer.innerHTML = antoHtml || '<p style="color: #6b7280;">Sin presupuestos</p>';
-            ferContainer.innerHTML = ferHtml || '<p style="color: #6b7280;">Sin presupuestos</p>';
+            document.getElementById('budgetEditsShared').innerHTML = Object.entries(budgetsShared).map(([subcat, budget]) => `<div class="form-group"><label>${subcat}</label><input type="number" class="budget-input-shared" data-subcat="${subcat}" value="${budget}" min="0" step="0.01"></div>`).join('');
+            document.getElementById('budgetEditsAnto').innerHTML = Object.entries(budgetsAnto).map(([subcat, budget]) => `<div class="form-group"><label>${subcat}</label><input type="number" class="budget-input-anto" data-subcat="${subcat}" value="${budget}" min="0" step="0.01"></div>`).join('');
+            document.getElementById('budgetEditsFer').innerHTML = Object.entries(budgetsFer).map(([subcat, budget]) => `<div class="form-group"><label>${subcat}</label><input type="number" class="budget-input-fer" data-subcat="${subcat}" value="${budget}" min="0" step="0.01"></div>`).join('');
         }
         
         function saveBudgets() {
-            document.querySelectorAll('.budget-input-shared').forEach(input => {
-                const subcat = input.dataset.subcat;
-                budgetsShared[subcat] = parseFloat(input.value) || 0;
-            });
-            
-            document.querySelectorAll('.budget-input-anto').forEach(input => {
-                const subcat = input.dataset.subcat;
-                budgetsAnto[subcat] = parseFloat(input.value) || 0;
-            });
-            
-            document.querySelectorAll('.budget-input-fer').forEach(input => {
-                const subcat = input.dataset.subcat;
-                budgetsFer[subcat] = parseFloat(input.value) || 0;
-            });
-            
+            document.querySelectorAll('.budget-input-shared').forEach(input => budgetsShared[input.dataset.subcat] = parseFloat(input.value) || 0);
+            document.querySelectorAll('.budget-input-anto').forEach(input => budgetsAnto[input.dataset.subcat] = parseFloat(input.value) || 0);
+            document.querySelectorAll('.budget-input-fer').forEach(input => budgetsFer[input.dataset.subcat] = parseFloat(input.value) || 0);
             saveUserData();
             updateDashboard();
-            showSuccess('Presupuestos actualizados');
+            showSuccess('✅ Guardado');
         }
         
-        // UI Functions
+        function handleExcelUpload() {
+            const file = document.getElementById('excelFile').files[0];
+            if (!file) { showError('Selecciona un archivo'); return; }
+            
+            document.getElementById('excelStatus').textContent = '⏳ Procesando...';
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    
+                    let successCount = 0;
+                    rows.forEach(row => {
+                        if (row.Responsable && row.Categoría && row.Subcategoría && row.Monto && row.Mes && row.Fecha && row.Compartido && row.Participación) {
+                            expenses.push({
+                                id: Date.now().toString() + Math.random(),
+                                responsible: row.Responsable.toString().trim(),
+                                category: row.Categoría.toString().trim(),
+                                subcategory: row.Subcategoría.toString().trim(),
+                                amount: parseFloat(row.Monto),
+                                month: row.Mes.toString().trim(),
+                                date: row.Fecha.toString().trim(),
+                                paymentMethod: row['Medio de Pago'] ? row['Medio de Pago'].toString().trim() : 'Efectivo',
+                                description: row.Descripción ? row.Descripción.toString().trim() : '',
+                                isShared: row.Compartido.toString().trim(),
+                                participation: row.Participación.toString().trim()
+                            });
+                            successCount++;
+                        }
+                    });
+                    
+                    saveUserData();
+                    setTimeout(() => {
+                        populateMonthSelectors();
+                        updateDashboard();
+                        renderAllExpenses();
+                        document.getElementById('excelStatus').textContent = `✅ ${successCount} cargados`;
+                        showSuccess(`✅ ${successCount} gastos registrados`);
+                        document.getElementById('excelFile').value = '';
+                        setTimeout(() => document.getElementById('excelStatus').textContent = '', 5000);
+                    }, 1000);
+                } catch (error) {
+                    showError('Error: ' + error.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
-            
-            // Renderizar contenido específico cuando cambias de tab
-            if (tabName === 'budgets') {
-                renderBudgetEdits();
-            } else if (tabName === 'allExpenses') {
-                renderAllExpenses();
-            }
         }
         
         function showError(message) {
@@ -1773,130 +1018,6 @@ Sé específico con números y categorías.`;
             successDiv.textContent = message;
             successDiv.classList.add('active');
             setTimeout(() => successDiv.classList.remove('active'), 3000);
-        }
-        
-        function renderReembolsos() {
-            const container = document.getElementById('reembolsosContent');
-            const filterMonth = document.getElementById('reembolsosMonth')?.value || null;
-            let html = '';
-            
-            // Calcular reembolsos y guardar gastos asociados
-            let antoDebeAFer = 0;
-            let ferDebeAAnto = 0;
-            let antoDebeAFerGastos = [];
-            let ferDebeAAntoGastos = [];
-            
-            expenses.forEach(exp => {
-                // Filtrar por mes si se especifica
-                if (filterMonth && exp.month !== filterMonth) return;
-                
-                // LÓGICA DE REEMBOLSOS:
-                if (exp.responsible === 'Fer') {
-                    if (exp.isShared === 'Si' && exp.participation === '50-50') {
-                        const monto = exp.amount * 0.5;
-                        antoDebeAFer += monto;
-                        antoDebeAFerGastos.push({
-                            subcategory: exp.subcategory,
-                            amount: exp.amount,
-                            participation: '50%',
-                            monto: monto,
-                            date: exp.date
-                        });
-                    } else if (exp.participation === 'Anto 100%') {
-                        antoDebeAFer += exp.amount;
-                        antoDebeAFerGastos.push({
-                            subcategory: exp.subcategory,
-                            amount: exp.amount,
-                            participation: '100%',
-                            monto: exp.amount,
-                            date: exp.date
-                        });
-                    }
-                } else if (exp.responsible === 'Anto') {
-                    if (exp.isShared === 'Si' && exp.participation === '50-50') {
-                        const monto = exp.amount * 0.5;
-                        ferDebeAAnto += monto;
-                        ferDebeAAntoGastos.push({
-                            subcategory: exp.subcategory,
-                            amount: exp.amount,
-                            participation: '50%',
-                            monto: monto,
-                            date: exp.date
-                        });
-                    } else if (exp.participation === 'Fer 100%') {
-                        ferDebeAAnto += exp.amount;
-                        ferDebeAAntoGastos.push({
-                            subcategory: exp.subcategory,
-                            amount: exp.amount,
-                            participation: '100%',
-                            monto: exp.amount,
-                            date: exp.date
-                        });
-                    }
-                }
-            });
-            
-            if (antoDebeAFer === 0 && ferDebeAAnto === 0) {
-                container.innerHTML = '<p style="color: #6b7280; text-align: center; padding: 2rem;">✓ Sin reembolsos pendientes</p>';
-                return;
-            }
-            
-            html = '<div style="display: flex; flex-direction: column; gap: 1.5rem;">';
-            
-            if (antoDebeAFer > 0) {
-                html += `
-                    <div style="padding: 1rem; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px;">
-                        <div style="font-weight: 600; color: #92400e; margin-bottom: 0.5rem;">Anto debe a Fer</div>
-                        <div style="font-size: 24px; font-weight: 700; color: #d97706; margin-bottom: 1rem;">${formatCurrency(antoDebeAFer)}</div>
-                        
-                        <details style="cursor: pointer;">
-                            <summary style="color: #92400e; font-size: 13px; font-weight: 500; padding: 0.5rem; background: rgba(245, 158, 11, 0.1); border-radius: 4px;">
-                                📋 Ver gastos (${antoDebeAFerGastos.length})
-                            </summary>
-                            <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(245, 158, 11, 0.3);">
-                                ${antoDebeAFerGastos.map(gasto => `
-                                    <div style="padding: 0.5rem 0; border-bottom: 0.5px solid rgba(245, 158, 11, 0.2); font-size: 13px;">
-                                        <div style="display: flex; justify-content: space-between;">
-                                            <span style="color: #4b5563;"><strong>${gasto.subcategory}</strong> (${gasto.participation})</span>
-                                            <span style="color: #92400e; font-weight: 600;">${formatCurrency(gasto.monto)}</span>
-                                        </div>
-                                        <div style="font-size: 11px; color: #9ca3af; margin-top: 0.25rem;">📅 ${gasto.date}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </details>
-                    </div>
-                `;
-            }
-            
-            if (ferDebeAAnto > 0) {
-                html += `
-                    <div style="padding: 1rem; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 8px;">
-                        <div style="font-weight: 600; color: #1e3a8a; margin-bottom: 0.5rem;">Fer debe a Anto</div>
-                        <div style="font-size: 24px; font-weight: 700; color: #1d4ed8; margin-bottom: 1rem;">${formatCurrency(ferDebeAAnto)}</div>
-                        
-                        <details style="cursor: pointer;">
-                            <summary style="color: #1e3a8a; font-size: 13px; font-weight: 500; padding: 0.5rem; background: rgba(59, 130, 246, 0.1); border-radius: 4px;">
-                                📋 Ver gastos (${ferDebeAAntoGastos.length})
-                            </summary>
-                            <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(59, 130, 246, 0.3);">
-                                ${ferDebeAAntoGastos.map(gasto => `
-                                    <div style="padding: 0.5rem 0; border-bottom: 0.5px solid rgba(59, 130, 246, 0.2); font-size: 13px;">
-                                        <div style="display: flex; justify-content: space-between;">
-                                            <span style="color: #4b5563;"><strong>${gasto.subcategory}</strong> (${gasto.participation})</span>
-                                            <span style="color: #1e3a8a; font-weight: 600;">${formatCurrency(gasto.monto)}</span>
-                                        </div>
-                                        <div style="font-size: 11px; color: #9ca3af; margin-top: 0.25rem;">📅 ${gasto.date}</div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </details>
-                    </div>
-                `;
-            }
-            
-            html += '</div>';
-            container.innerHTML = html;
         }
     </script>
 </body>
