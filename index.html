@@ -831,32 +831,24 @@
         }
         
         function saveUserData() {
-            if (!currentUser) {
-                console.warn('⚠️ No hay usuario logueado');
-                return;
-            }
-            
-            if (isSavingToFirebase) {
-                pendingSave = true;
-                return;
-            }
+            if (!currentUser) { console.warn('⚠️ No hay usuario logueado'); return; }
+            if (isSavingToFirebase) { pendingSave = true; return; }
             
             isSavingToFirebase = true;
             pendingSave = false;
             console.log('💾 Guardando en Firebase... (' + expenses.length + ' gastos)');
             
             const userRef = db.collection('users').doc(currentUser.uid);
-            const batch = db.batch();
             
             // Guardar presupuestos en documento principal
-            batch.set(userRef, {
+            const budgetSave = userRef.set({
                 budgetsShared: budgetsShared,
                 budgetsAnto: budgetsAnto,
                 budgetsFer: budgetsFer,
                 lastUpdated: new Date()
             }, {merge: true});
             
-            // Agrupar gastos por mes y guardar en subcollecciones
+            // Agrupar gastos por mes
             const expensesByMonth = {};
             expenses.forEach(exp => {
                 const month = exp.month || 'unknown';
@@ -864,19 +856,16 @@
                 expensesByMonth[month].push(exp);
             });
             
-            Object.entries(expensesByMonth).forEach(([month, monthExpenses]) => {
-                const monthRef = userRef.collection('months').doc(month);
-                batch.set(monthRef, { expenses: monthExpenses });
+            // Guardar cada mes por separado
+            const monthSaves = Object.entries(expensesByMonth).map(([month, monthExpenses]) => {
+                return userRef.collection('months').doc(month).set({ expenses: monthExpenses });
             });
             
-            batch.commit()
+            Promise.all([budgetSave, ...monthSaves])
             .then(() => {
                 console.log('✅ Datos guardados en Firebase');
                 isSavingToFirebase = false;
-                if (pendingSave) {
-                    console.log('🔁 Ejecutando guardado pendiente...');
-                    saveUserData();
-                }
+                if (pendingSave) { saveUserData(); }
             })
             .catch((error) => {
                 console.error('❌ Error guardando en Firebase:', error);
