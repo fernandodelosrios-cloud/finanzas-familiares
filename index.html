@@ -770,8 +770,7 @@
                                 budgetsFer[month] = {...(data.budgetsFer || {})};
                             });
                             
-                            // Guardar en nuevo formato
-                            saveUserData();
+                            // Guardar en nuevo formato (pero SIN saveUserData aquí para evitar saturar Firebase)
                         }
                     }
                 }
@@ -829,8 +828,7 @@
                     budgetsFer[currentMonth]['Supermercado'] = 200;
                 }
                 
-                // Guardar la estructura corregida en Firebase
-                saveUserData();
+                // Las correcciones (Taxis, Supermercado) se guardarán cuando el usuario edite presupuestos
                 
                 populateMonthSelectors();
                 initBudgetMonthSelector();
