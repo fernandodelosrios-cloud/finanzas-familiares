@@ -882,20 +882,20 @@
         }
         
         function updateDashboard() {
-            const filterMonth = document.getElementById('dashboardMonth').value || getCurrentMonth();
+            const filterMonth = document.getElementById('dashboardMonth')?.value || getCurrentMonth();
             
             // Obtener presupuestos del mes seleccionado
-            const monthBudgetsShared = budgetsShared[filterMonth] || {...defaultBudgetsShared};
-            const monthBudgetsAnto = budgetsAnto[filterMonth] || {...defaultBudgetsAnto};
-            const monthBudgetsFer = budgetsFer[filterMonth] || {...defaultBudgetsFer};
+            const monthBudgetsShared = budgetsShared[filterMonth] ? {...budgetsShared[filterMonth]} : {...defaultBudgetsShared};
+            const monthBudgetsAnto = budgetsAnto[filterMonth] ? {...budgetsAnto[filterMonth]} : {...defaultBudgetsAnto};
+            const monthBudgetsFer = budgetsFer[filterMonth] ? {...budgetsFer[filterMonth]} : {...defaultBudgetsFer};
             
             const sharedExpenses = calculateSharedExpenses(filterMonth);
             const antoExpenses = calculateExpensesByPerson('Anto', filterMonth);
             const ferExpenses = calculateExpensesByPerson('Fer', filterMonth);
             
-            const totalBudgetShared = Object.values(monthBudgetsShared).reduce((sum, b) => sum + b, 0);
-            const totalBudgetAnto = Object.values(monthBudgetsAnto).reduce((sum, b) => sum + b, 0);
-            const totalBudgetFer = Object.values(monthBudgetsFer).reduce((sum, b) => sum + b, 0);
+            const totalBudgetShared = Object.values(monthBudgetsShared).reduce((sum, b) => sum + (parseFloat(b) || 0), 0);
+            const totalBudgetAnto = Object.values(monthBudgetsAnto).reduce((sum, b) => sum + (parseFloat(b) || 0), 0);
+            const totalBudgetFer = Object.values(monthBudgetsFer).reduce((sum, b) => sum + (parseFloat(b) || 0), 0);
             
             const sharedPercentage = totalBudgetShared > 0 ? Math.round((sharedExpenses / totalBudgetShared) * 100) : 0;
             const antoPercentage = totalBudgetAnto > 0 ? Math.round((antoExpenses / totalBudgetAnto) * 100) : 0;
