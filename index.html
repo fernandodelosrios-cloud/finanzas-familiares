@@ -748,27 +748,73 @@
                     // Cargar presupuestos (con soporte para estructura antigua)
                     if (data.budgetsShared) {
                         if (typeof data.budgetsShared['2026-01'] === 'object' && !Array.isArray(data.budgetsShared['2026-01'])) {
-                            // Nueva estructura (por mes)
-                            budgetsShared = data.budgetsShared;
+                            // Nueva estructura (por mes) - usar tal como está
+                            budgetsShared = data.budgetsShared || {};
                             budgetsAnto = data.budgetsAnto || {};
                             budgetsFer = data.budgetsFer || {};
                         } else {
                             // Estructura antigua (compatibilidad)
-                            const currentMonth = getCurrentMonth();
-                            budgetsShared = { [currentMonth]: data.budgetsShared };
-                            budgetsAnto = { [currentMonth]: data.budgetsAnto || {} };
-                            budgetsFer = { [currentMonth]: data.budgetsFer || {} };
+                            // Crear presupuestos para TODOS los meses que tienen gastos
+                            const monthsWithExpenses = new Set();
+                            expenses.forEach(exp => {
+                                if (exp.month) monthsWithExpenses.add(exp.month);
+                            });
+                            
+                            budgetsShared = {};
+                            budgetsAnto = {};
+                            budgetsFer = {};
+                            
+                            monthsWithExpenses.forEach(month => {
+                                budgetsShared[month] = {...data.budgetsShared};
+                                budgetsAnto[month] = {...(data.budgetsAnto || {})};
+                                budgetsFer[month] = {...(data.budgetsFer || {})};
+                            });
+                            
                             // Guardar en nuevo formato
                             saveUserData();
                         }
                     }
                 }
                 
-                // Inicializar presupuestos para meses sin datos
+                // Inicializar presupuestos para meses sin datos (con estructura consistente)
                 const currentMonth = getCurrentMonth();
                 if (!budgetsShared[currentMonth]) budgetsShared[currentMonth] = {...defaultBudgetsShared};
                 if (!budgetsAnto[currentMonth]) budgetsAnto[currentMonth] = {...defaultBudgetsAnto};
                 if (!budgetsFer[currentMonth]) budgetsFer[currentMonth] = {...defaultBudgetsFer};
+                
+                // Asegurar que todos los meses con gastos tengan presupuestos
+                expenses.forEach(exp => {
+                    if (exp.month) {
+                        if (!budgetsShared[exp.month]) budgetsShared[exp.month] = {...defaultBudgetsShared};
+                        if (!budgetsAnto[exp.month]) budgetsAnto[exp.month] = {...defaultBudgetsAnto};
+                        if (!budgetsFer[exp.month]) budgetsFer[exp.month] = {...defaultBudgetsFer};
+                        
+                        // CORRECCIÓN: Remover Taxis de Compartido si está ahí, y asegurar que esté en Anto y Fer
+                        if (budgetsShared[exp.month]['Taxis']) {
+                            delete budgetsShared[exp.month]['Taxis'];
+                        }
+                        if (!budgetsAnto[exp.month]['Taxis']) {
+                            budgetsAnto[exp.month]['Taxis'] = 150;
+                        }
+                        if (!budgetsFer[exp.month]['Taxis']) {
+                            budgetsFer[exp.month]['Taxis'] = 150;
+                        }
+                    }
+                });
+                
+                // También asegurar que el mes actual tenga estructura correcta
+                if (budgetsShared[currentMonth]['Taxis']) {
+                    delete budgetsShared[currentMonth]['Taxis'];
+                }
+                if (!budgetsAnto[currentMonth]['Taxis']) {
+                    budgetsAnto[currentMonth]['Taxis'] = 150;
+                }
+                if (!budgetsFer[currentMonth]['Taxis']) {
+                    budgetsFer[currentMonth]['Taxis'] = 150;
+                }
+                
+                // Guardar la estructura corregida en Firebase
+                saveUserData();
                 
                 populateMonthSelectors();
                 initBudgetMonthSelector();
@@ -965,6 +1011,9 @@
             let html = '';
             
             for (const [subcat, budgetVal] of Object.entries(budgetObj)) {
+                // Filtrar solo presupuestos válidos (números)
+                if (typeof budgetVal !== 'number' && isNaN(parseFloat(budgetVal))) continue;
+                
                 const budget = parseFloat(budgetVal) || 0;
                 let spent = 0;
                 expenses.forEach(exp => {
@@ -1191,26 +1240,44 @@
             const monthAnto = budgetsAnto[selectedMonth] || {...defaultBudgetsAnto};
             const monthFer = budgetsFer[selectedMonth] || {...defaultBudgetsFer};
             
-            document.getElementById('budgetEditsShared').innerHTML = Object.entries(monthShared).map(([subcat, budget]) => `
-                <div class="form-group">
-                    <label>${subcat}</label>
-                    <input type="number" class="budget-input-shared" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
-                </div>
-            `).join('');
+            // Función para renderizar solo presupuestos válidos (números)
+            const renderBudgets = (budgetObj) => {
+                return Object.entries(budgetObj)
+                    .filter(([key, val]) => typeof val === 'number' || !isNaN(parseFloat(val)))
+                    .map(([subcat, budget]) => `
+                        <div class="form-group">
+                            <label>${subcat}</label>
+                            <input type="number" class="budget-input-${subcat === 'Compartido' ? 'shared' : (budgetObj === monthAnto ? 'anto' : 'fer')}" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                        </div>
+                    `).join('');
+            };
             
-            document.getElementById('budgetEditsAnto').innerHTML = Object.entries(monthAnto).map(([subcat, budget]) => `
-                <div class="form-group">
-                    <label>${subcat}</label>
-                    <input type="number" class="budget-input-anto" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
-                </div>
-            `).join('');
+            document.getElementById('budgetEditsShared').innerHTML = Object.entries(monthShared)
+                .filter(([key, val]) => typeof val === 'number' || !isNaN(parseFloat(val)))
+                .map(([subcat, budget]) => `
+                    <div class="form-group">
+                        <label>${subcat}</label>
+                        <input type="number" class="budget-input-shared" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                    </div>
+                `).join('');
             
-            document.getElementById('budgetEditsFer').innerHTML = Object.entries(monthFer).map(([subcat, budget]) => `
-                <div class="form-group">
-                    <label>${subcat}</label>
-                    <input type="number" class="budget-input-fer" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
-                </div>
-            `).join('');
+            document.getElementById('budgetEditsAnto').innerHTML = Object.entries(monthAnto)
+                .filter(([key, val]) => typeof val === 'number' || !isNaN(parseFloat(val)))
+                .map(([subcat, budget]) => `
+                    <div class="form-group">
+                        <label>${subcat}</label>
+                        <input type="number" class="budget-input-anto" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                    </div>
+                `).join('');
+            
+            document.getElementById('budgetEditsFer').innerHTML = Object.entries(monthFer)
+                .filter(([key, val]) => typeof val === 'number' || !isNaN(parseFloat(val)))
+                .map(([subcat, budget]) => `
+                    <div class="form-group">
+                        <label>${subcat}</label>
+                        <input type="number" class="budget-input-fer" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                    </div>
+                `).join('');
         }
         
         function initBudgetMonthSelector() {
