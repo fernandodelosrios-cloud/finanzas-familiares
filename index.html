@@ -946,7 +946,8 @@
             const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado'];
             let html = '';
             
-            for (const [subcat, budget] of Object.entries(budgetObj)) {
+            for (const [subcat, budgetVal] of Object.entries(budgetObj)) {
+                const budget = parseFloat(budgetVal) || 0;
                 let spent = 0;
                 expenses.forEach(exp => {
                     if (filterMonth && exp.month !== filterMonth) return;
@@ -964,7 +965,7 @@
                     }
                 });
                 
-                const percentage = Math.min((spent / budget) * 100, 100);
+                const percentage = budget > 0 ? Math.min((spent / budget) * 100, 100) : 0;
                 const remaining = budget - spent;
                 const barClass = spent > budget ? 'budget-progress-bar over-budget' : 'budget-progress-bar';
                 
