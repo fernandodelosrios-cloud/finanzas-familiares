@@ -535,17 +535,30 @@
                 <div class="form-section">
                     <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Todos los Gastos</h2>
                     
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
                         <select id="allExpensesMonth" onchange="renderAllExpenses()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; min-width: 180px;"></select>
                         <select id="allExpensesResponsible" onchange="renderAllExpenses()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; min-width: 150px;">
                             <option value="">Todos</option>
                             <option value="Anto">Anto</option>
                             <option value="Fer">Fer</option>
                         </select>
+                        <button type="button" class="button primary" style="width: auto;" onclick="showDownloadModal()">📥 Descargar Excel</button>
                     </div>
                     
                     <div id="allExpensesContainer" style="max-height: 600px; overflow-y: auto;">
                         <p style="color: #6b7280;">Sin gastos</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MODAL DESCARGAR -->
+            <div id="downloadModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                <div style="background: white; border-radius: 12px; padding: 2rem; max-width: 400px; max-height: 80vh; overflow-y: auto;">
+                    <h3 style="font-weight: 600; margin-bottom: 1rem;">Selecciona meses para descargar</h3>
+                    <div id="monthsToDownload" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; max-height: 300px; overflow-y: auto;"></div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" class="button primary" style="flex: 1;" onclick="downloadAllExpensesAsExcel()">Descargar</button>
+                        <button type="button" style="flex: 1; padding: 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;" onclick="document.getElementById('downloadModal').style.display = 'none';">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -566,6 +579,13 @@
             <div id="budgets" class="tab-content">
                 <div class="form-section">
                     <h2 style="font-size: 16px; font-weight: 500; margin-bottom: 1.5rem;">Editar Presupuestos</h2>
+                    
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                        <label for="budgetMonth" style="font-weight: 500; margin: 0;">Mes:</label>
+                        <select id="budgetMonth" onchange="onBudgetMonthChange()" style="padding: 0.5rem; border: 0.5px solid #e5e7eb; border-radius: 8px; min-width: 200px;">
+                            <option value="">Selecciona mes</option>
+                        </select>
+                    </div>
                     
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
                         <div>
@@ -614,11 +634,30 @@
         
         let currentUser = null;
         let expenses = [];
-        let budgetsShared = {'Agua': 50, 'Alquiler': 1500, 'Atlas y Ares': 200, 'Equipamiento casa': 100, 'Luz': 80, 'Limpieza': 100, 'Internet + Celulares': 80, 'Gas': 50, 'Supermercado': 400, 'Taxis': 150};
-        let budgetsAnto = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100};
-        let budgetsFer = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100};
+        
+        // Presupuestos por mes: { 'YYYY-MM': { 'Agua': 50, ... } }
+        let budgetsShared = {};
+        let budgetsAnto = {};
+        let budgetsFer = {};
+        
+        // Presupuestos base (para nuevos meses)
+        const defaultBudgetsShared = {'Agua': 50, 'Alquiler': 1500, 'Atlas y Ares': 200, 'Equipamiento casa': 100, 'Luz': 80, 'Limpieza': 100, 'Internet + Celulares': 80, 'Gas': 50, 'Supermercado': 400};
+        const defaultBudgetsAnto = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100, 'Taxis': 150};
+        const defaultBudgetsFer = {'Social': 250, 'Deporte': 200, 'Peluquería': 80, 'Streaming / Suscripciones': 50, 'Transporte público': 100, 'Psicólogo': 120, 'Salud': 150, 'Ropa': 200, 'Viajes': 300, 'Varios': 100, 'Taxis': 150};
         
         const categories = {'Gastos fijos': ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas'], 'Gastos variables': ['Deporte', 'Peluquería', 'Psicólogo', 'Ropa', 'Salud', 'Social', 'Streaming / Suscripciones', 'Transporte público', 'Varios', 'Supermercado', 'Taxis', 'Viajes']};
+        
+        // Funciones de utilidad
+        function getCurrentMonth() {
+            const today = new Date();
+            return today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0');
+        }
+        
+        function getMonthName(monthStr) {
+            const [year, month] = monthStr.split('-');
+            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            return months[parseInt(month) - 1] + ' ' + year;
+        }
         
         // Auth
         auth.onAuthStateChanged((user) => {
@@ -685,12 +724,36 @@
         function loadUserData() {
             db.collection('users').doc(currentUser.uid).get().then(doc => {
                 if (doc.exists) {
-                    expenses = doc.data().expenses || [];
-                    budgetsShared = { ...budgetsShared, ...doc.data().budgetsShared };
-                    budgetsAnto = { ...budgetsAnto, ...doc.data().budgetsAnto };
-                    budgetsFer = { ...budgetsFer, ...doc.data().budgetsFer };
+                    const data = doc.data();
+                    expenses = data.expenses || [];
+                    
+                    // Cargar presupuestos (con soporte para estructura antigua)
+                    if (data.budgetsShared) {
+                        if (typeof data.budgetsShared['2026-01'] === 'object' && !Array.isArray(data.budgetsShared['2026-01'])) {
+                            // Nueva estructura (por mes)
+                            budgetsShared = data.budgetsShared;
+                            budgetsAnto = data.budgetsAnto || {};
+                            budgetsFer = data.budgetsFer || {};
+                        } else {
+                            // Estructura antigua (compatibilidad)
+                            const currentMonth = getCurrentMonth();
+                            budgetsShared = { [currentMonth]: data.budgetsShared };
+                            budgetsAnto = { [currentMonth]: data.budgetsAnto || {} };
+                            budgetsFer = { [currentMonth]: data.budgetsFer || {} };
+                            // Guardar en nuevo formato
+                            saveUserData();
+                        }
+                    }
                 }
+                
+                // Inicializar presupuestos para meses sin datos
+                const currentMonth = getCurrentMonth();
+                if (!budgetsShared[currentMonth]) budgetsShared[currentMonth] = {...defaultBudgetsShared};
+                if (!budgetsAnto[currentMonth]) budgetsAnto[currentMonth] = {...defaultBudgetsAnto};
+                if (!budgetsFer[currentMonth]) budgetsFer[currentMonth] = {...defaultBudgetsFer};
+                
                 populateMonthSelectors();
+                initBudgetMonthSelector();
                 updateDashboard();
                 renderBudgetEdits();
                 document.getElementById('expenseForm').addEventListener('submit', handleAddExpense);
@@ -819,27 +882,40 @@
         }
         
         function updateDashboard() {
-            const filterMonth = document.getElementById('dashboardMonth').value || null;
+            const filterMonth = document.getElementById('dashboardMonth').value || getCurrentMonth();
+            
+            // Obtener presupuestos del mes seleccionado
+            const monthBudgetsShared = budgetsShared[filterMonth] || {...defaultBudgetsShared};
+            const monthBudgetsAnto = budgetsAnto[filterMonth] || {...defaultBudgetsAnto};
+            const monthBudgetsFer = budgetsFer[filterMonth] || {...defaultBudgetsFer};
+            
             const sharedExpenses = calculateSharedExpenses(filterMonth);
             const antoExpenses = calculateExpensesByPerson('Anto', filterMonth);
             const ferExpenses = calculateExpensesByPerson('Fer', filterMonth);
-            const totalBudgetShared = Object.values(budgetsShared).reduce((sum, b) => sum + b, 0);
-            const totalBudgetAnto = Object.values(budgetsAnto).reduce((sum, b) => sum + b, 0);
-            const totalBudgetFer = Object.values(budgetsFer).reduce((sum, b) => sum + b, 0);
             
-            document.getElementById('dashboardSharedPct').textContent = Math.round((sharedExpenses / totalBudgetShared) * 100) + '%';
+            const totalBudgetShared = Object.values(monthBudgetsShared).reduce((sum, b) => sum + b, 0);
+            const totalBudgetAnto = Object.values(monthBudgetsAnto).reduce((sum, b) => sum + b, 0);
+            const totalBudgetFer = Object.values(monthBudgetsFer).reduce((sum, b) => sum + b, 0);
+            
+            const sharedPercentage = totalBudgetShared > 0 ? Math.round((sharedExpenses / totalBudgetShared) * 100) : 0;
+            const antoPercentage = totalBudgetAnto > 0 ? Math.round((antoExpenses / totalBudgetAnto) * 100) : 0;
+            const ferPercentage = totalBudgetFer > 0 ? Math.round((ferExpenses / totalBudgetFer) * 100) : 0;
+            
+            document.getElementById('dashboardSharedPct').textContent = sharedPercentage + '%';
             document.getElementById('dashboardSharedSpent').textContent = sharedExpenses.toFixed(2);
             document.getElementById('dashboardSharedBudget').textContent = totalBudgetShared.toFixed(2);
-            document.getElementById('dashboardAntoPct').textContent = Math.round((antoExpenses / totalBudgetAnto) * 100) + '%';
+            
+            document.getElementById('dashboardAntoPct').textContent = antoPercentage + '%';
             document.getElementById('dashboardAntoSpent').textContent = antoExpenses.toFixed(2);
             document.getElementById('dashboardAntoBudget').textContent = totalBudgetAnto.toFixed(2);
-            document.getElementById('dashboardFerPct').textContent = Math.round((ferExpenses / totalBudgetFer) * 100) + '%';
+            
+            document.getElementById('dashboardFerPct').textContent = ferPercentage + '%';
             document.getElementById('dashboardFerSpent').textContent = ferExpenses.toFixed(2);
             document.getElementById('dashboardFerBudget').textContent = totalBudgetFer.toFixed(2);
             
-            renderBudgetSection('sharedBudget', 'Compartido', budgetsShared, filterMonth);
-            renderBudgetSection('antoBudget', 'Anto', budgetsAnto, filterMonth);
-            renderBudgetSection('ferBudget', 'Fer', budgetsFer, filterMonth);
+            renderBudgetSection('sharedBudget', 'Compartido', monthBudgetsShared, filterMonth);
+            renderBudgetSection('antoBudget', 'Anto', monthBudgetsAnto, filterMonth);
+            renderBudgetSection('ferBudget', 'Fer', monthBudgetsFer, filterMonth);
         }
         
         function calculateExpensesByPerson(person, filterMonth = null) {
@@ -857,7 +933,7 @@
         }
         
         function calculateSharedExpenses(filterMonth = null) {
-            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis'];
+            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado'];
             let total = 0;
             expenses.forEach(exp => {
                 if (filterMonth && exp.month !== filterMonth) return;
@@ -867,7 +943,7 @@
         }
         
         function renderBudgetSection(elementId, person, budgetObj, filterMonth = null) {
-            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado', 'Taxis'];
+            const sharedSubs = ['Agua', 'Alquiler', 'Atlas y Ares', 'Equipamiento casa', 'Luz', 'Limpieza', 'Internet + Celulares', 'Gas', 'Supermercado'];
             let html = '';
             
             for (const [subcat, budget] of Object.entries(budgetObj)) {
@@ -1051,18 +1127,91 @@
         }
         
         function renderBudgetEdits() {
-            document.getElementById('budgetEditsShared').innerHTML = Object.entries(budgetsShared).map(([subcat, budget]) => `<div class="form-group"><label>${subcat}</label><input type="number" class="budget-input-shared" data-subcat="${subcat}" value="${budget}" min="0" step="0.01"></div>`).join('');
-            document.getElementById('budgetEditsAnto').innerHTML = Object.entries(budgetsAnto).map(([subcat, budget]) => `<div class="form-group"><label>${subcat}</label><input type="number" class="budget-input-anto" data-subcat="${subcat}" value="${budget}" min="0" step="0.01"></div>`).join('');
-            document.getElementById('budgetEditsFer').innerHTML = Object.entries(budgetsFer).map(([subcat, budget]) => `<div class="form-group"><label>${subcat}</label><input type="number" class="budget-input-fer" data-subcat="${subcat}" value="${budget}" min="0" step="0.01"></div>`).join('');
+            const currentMonth = getCurrentMonth();
+            const selectedMonth = document.getElementById('budgetMonth')?.value || currentMonth;
+            
+            // Obtener presupuestos del mes seleccionado (o defaults)
+            const monthShared = budgetsShared[selectedMonth] || {...defaultBudgetsShared};
+            const monthAnto = budgetsAnto[selectedMonth] || {...defaultBudgetsAnto};
+            const monthFer = budgetsFer[selectedMonth] || {...defaultBudgetsFer};
+            
+            document.getElementById('budgetEditsShared').innerHTML = Object.entries(monthShared).map(([subcat, budget]) => `
+                <div class="form-group">
+                    <label>${subcat}</label>
+                    <input type="number" class="budget-input-shared" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                </div>
+            `).join('');
+            
+            document.getElementById('budgetEditsAnto').innerHTML = Object.entries(monthAnto).map(([subcat, budget]) => `
+                <div class="form-group">
+                    <label>${subcat}</label>
+                    <input type="number" class="budget-input-anto" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                </div>
+            `).join('');
+            
+            document.getElementById('budgetEditsFer').innerHTML = Object.entries(monthFer).map(([subcat, budget]) => `
+                <div class="form-group">
+                    <label>${subcat}</label>
+                    <input type="number" class="budget-input-fer" data-subcat="${subcat}" value="${budget}" min="0" step="0.01">
+                </div>
+            `).join('');
+        }
+        
+        function initBudgetMonthSelector() {
+            const currentMonth = getCurrentMonth();
+            const allMonths = new Set();
+            const today = new Date();
+            
+            for (let i = 12; i > 0; i--) {
+                const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+                allMonths.add(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+            }
+            for (let i = 0; i < 12; i++) {
+                const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
+                allMonths.add(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+            }
+            
+            const monthsArray = Array.from(allMonths).sort().reverse();
+            const months = {'01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril', '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto', '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre'};
+            
+            const budgetMonth = document.getElementById('budgetMonth');
+            budgetMonth.innerHTML = '';
+            monthsArray.forEach(month => {
+                const [year, monthNum] = month.split('-');
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = months[monthNum] + ' ' + year;
+                budgetMonth.appendChild(option);
+            });
+            budgetMonth.value = currentMonth;
+        }
+        
+        function onBudgetMonthChange() {
+            renderBudgetEdits();
         }
         
         function saveBudgets() {
-            document.querySelectorAll('.budget-input-shared').forEach(input => budgetsShared[input.dataset.subcat] = parseFloat(input.value) || 0);
-            document.querySelectorAll('.budget-input-anto').forEach(input => budgetsAnto[input.dataset.subcat] = parseFloat(input.value) || 0);
-            document.querySelectorAll('.budget-input-fer').forEach(input => budgetsFer[input.dataset.subcat] = parseFloat(input.value) || 0);
+            const selectedMonth = document.getElementById('budgetMonth')?.value || getCurrentMonth();
+            
+            // Inicializar mes si no existe
+            if (!budgetsShared[selectedMonth]) budgetsShared[selectedMonth] = {};
+            if (!budgetsAnto[selectedMonth]) budgetsAnto[selectedMonth] = {};
+            if (!budgetsFer[selectedMonth]) budgetsFer[selectedMonth] = {};
+            
+            // Guardar cambios
+            document.querySelectorAll('.budget-input-shared').forEach(input => {
+                budgetsShared[selectedMonth][input.dataset.subcat] = parseFloat(input.value) || 0;
+            });
+            document.querySelectorAll('.budget-input-anto').forEach(input => {
+                budgetsAnto[selectedMonth][input.dataset.subcat] = parseFloat(input.value) || 0;
+            });
+            document.querySelectorAll('.budget-input-fer').forEach(input => {
+                budgetsFer[selectedMonth][input.dataset.subcat] = parseFloat(input.value) || 0;
+            });
+            
             saveUserData();
             updateDashboard();
-            showSuccess('✅ Guardado');
+            showSuccess('✅ Presupuestos de ' + getMonthName(selectedMonth) + ' guardados');
         }
         
         function handleExcelUpload() {
@@ -1194,6 +1343,72 @@
                 
                 reader.readAsArrayBuffer(file);
             });
+        }
+        
+        function showDownloadModal() {
+            const modal = document.getElementById('downloadModal');
+            const monthsContainer = document.getElementById('monthsToDownload');
+            
+            // Obtener todos los meses únicos de los gastos
+            const allMonths = new Set();
+            expenses.forEach(exp => {
+                if (exp.month) allMonths.add(exp.month);
+            });
+            
+            const monthsArray = Array.from(allMonths).sort().reverse();
+            const months = {'01': 'Enero', '02': 'Febrero', '03': 'Marzo', '04': 'Abril', '05': 'Mayo', '06': 'Junio', '07': 'Julio', '08': 'Agosto', '09': 'Septiembre', '10': 'Octubre', '11': 'Noviembre', '12': 'Diciembre'};
+            
+            monthsContainer.innerHTML = monthsArray.map(month => {
+                const [year, monthNum] = month.split('-');
+                const monthName = months[monthNum] + ' ' + year;
+                return `<label style="display: flex; align-items: center; gap: 0.5rem; margin: 0; cursor: pointer;">
+                    <input type="checkbox" class="month-checkbox" value="${month}" checked>
+                    <span>${monthName}</span>
+                </label>`;
+            }).join('');
+            
+            modal.style.display = 'flex';
+        }
+        
+        function downloadAllExpensesAsExcel() {
+            const months = document.querySelectorAll('#monthsToDownload .month-checkbox:checked');
+            if (months.length === 0) {
+                showError('Selecciona al menos un mes');
+                return;
+            }
+            
+            const selectedMonths = Array.from(months).map(cb => cb.value);
+            const filteredExpenses = expenses.filter(exp => selectedMonths.includes(exp.month));
+            
+            if (filteredExpenses.length === 0) {
+                showError('No hay gastos en los meses seleccionados');
+                return;
+            }
+            
+            // Crear datos para Excel
+            const excelData = filteredExpenses.map(exp => ({
+                'Responsable': exp.responsible,
+                'Categoría': exp.category,
+                'Subcategoría': exp.subcategory,
+                'Monto': exp.amount,
+                'Mes': exp.month,
+                'Fecha': exp.date,
+                'Medio de Pago': exp.paymentMethod,
+                'Descripción': exp.description,
+                'Compartido': exp.isShared,
+                'Participación': exp.participation
+            }));
+            
+            // Crear workbook con SheetJS
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Gastos');
+            
+            // Descargar
+            const fileName = 'gastos_' + new Date().toISOString().split('T')[0] + '.xlsx';
+            XLSX.writeFile(workbook, fileName);
+            
+            showSuccess('✅ Excel descargado: ' + fileName);
         }
         
         function switchTab(tabName) {
