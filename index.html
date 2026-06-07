@@ -742,95 +742,81 @@
         }
         
         function loadUserData() {
-            db.collection('users').doc(currentUser.uid).get().then(doc => {
+            const userRef = db.collection('users').doc(currentUser.uid);
+            
+            // Cargar presupuestos del documento principal
+            userRef.get().then(doc => {
                 if (doc.exists) {
                     const data = doc.data();
-                    expenses = data.expenses || [];
                     
-                    // Cargar presupuestos (con soporte para estructura antigua)
+                    // Detectar si hay gastos en el documento antiguo y migrarlos
+                    if (data.expenses && data.expenses.length > 0) {
+                        console.log('📦 Migrando gastos a nueva estructura...');
+                        expenses = data.expenses;
+                    }
+                    
+                    // Cargar presupuestos
                     if (data.budgetsShared) {
-                        if (typeof data.budgetsShared['2026-01'] === 'object' && !Array.isArray(data.budgetsShared['2026-01'])) {
-                            // Nueva estructura (por mes) - usar tal como está
+                        if (typeof Object.values(data.budgetsShared)[0] === 'object') {
                             budgetsShared = data.budgetsShared || {};
                             budgetsAnto = data.budgetsAnto || {};
                             budgetsFer = data.budgetsFer || {};
                         } else {
-                            // Estructura antigua (compatibilidad)
-                            // Crear presupuestos para TODOS los meses que tienen gastos
-                            const monthsWithExpenses = new Set();
-                            expenses.forEach(exp => {
-                                if (exp.month) monthsWithExpenses.add(exp.month);
-                            });
-                            
-                            budgetsShared = {};
-                            budgetsAnto = {};
-                            budgetsFer = {};
-                            
+                            const currentMonth = getCurrentMonth();
+                            const monthsWithExpenses = new Set(expenses.map(e => e.month).filter(Boolean));
                             monthsWithExpenses.forEach(month => {
                                 budgetsShared[month] = {...data.budgetsShared};
                                 budgetsAnto[month] = {...(data.budgetsAnto || {})};
                                 budgetsFer[month] = {...(data.budgetsFer || {})};
                             });
-                            
-                            // Guardar en nuevo formato (pero SIN saveUserData aquí para evitar saturar Firebase)
                         }
                     }
                 }
                 
-                // Inicializar presupuestos para meses sin datos (con estructura consistente)
+                // Cargar gastos de subcollecciones por mes
+                return userRef.collection('months').get();
+            })
+            .then(monthsSnapshot => {
+                // Combinar gastos de subcollecciones (evitar duplicados con los migrados)
+                const subcollectionExpenses = [];
+                monthsSnapshot.forEach(doc => {
+                    const monthData = doc.data();
+                    if (monthData.expenses) {
+                        subcollectionExpenses.push(...monthData.expenses);
+                    }
+                });
+                
+                // Si hay gastos en subcollecciones, usar esos (son más recientes)
+                if (subcollectionExpenses.length > 0) {
+                    expenses = subcollectionExpenses;
+                }
+                
+                console.log('📊 Total gastos cargados:', expenses.length);
+                
+                // Inicializar presupuestos del mes actual
                 const currentMonth = getCurrentMonth();
                 if (!budgetsShared[currentMonth]) budgetsShared[currentMonth] = {...defaultBudgetsShared};
                 if (!budgetsAnto[currentMonth]) budgetsAnto[currentMonth] = {...defaultBudgetsAnto};
                 if (!budgetsFer[currentMonth]) budgetsFer[currentMonth] = {...defaultBudgetsFer};
                 
-                // Asegurar que todos los meses con gastos tengan presupuestos
+                // Corregir estructura para meses con gastos
                 expenses.forEach(exp => {
                     if (exp.month) {
                         if (!budgetsShared[exp.month]) budgetsShared[exp.month] = {...defaultBudgetsShared};
                         if (!budgetsAnto[exp.month]) budgetsAnto[exp.month] = {...defaultBudgetsAnto};
                         if (!budgetsFer[exp.month]) budgetsFer[exp.month] = {...defaultBudgetsFer};
-                        
-                        // CORRECCIÓN: Remover Taxis de Compartido si está ahí, y asegurar que esté en Anto y Fer
-                        if (budgetsShared[exp.month]['Taxis']) {
-                            delete budgetsShared[exp.month]['Taxis'];
-                        }
-                        if (!budgetsAnto[exp.month]['Taxis']) {
-                            budgetsAnto[exp.month]['Taxis'] = 150;
-                        }
-                        if (!budgetsFer[exp.month]['Taxis']) {
-                            budgetsFer[exp.month]['Taxis'] = 150;
-                        }
-                        
-                        // CORRECCIÓN: Agregar Supermercado en Anto y Fer si no existe
-                        if (!budgetsAnto[exp.month]['Supermercado']) {
-                            budgetsAnto[exp.month]['Supermercado'] = 200;
-                        }
-                        if (!budgetsFer[exp.month]['Supermercado']) {
-                            budgetsFer[exp.month]['Supermercado'] = 200;
-                        }
+                        if (budgetsShared[exp.month]['Taxis']) delete budgetsShared[exp.month]['Taxis'];
+                        if (!budgetsAnto[exp.month]['Taxis']) budgetsAnto[exp.month]['Taxis'] = 150;
+                        if (!budgetsFer[exp.month]['Taxis']) budgetsFer[exp.month]['Taxis'] = 150;
+                        if (!budgetsAnto[exp.month]['Supermercado']) budgetsAnto[exp.month]['Supermercado'] = 200;
+                        if (!budgetsFer[exp.month]['Supermercado']) budgetsFer[exp.month]['Supermercado'] = 200;
                     }
                 });
-                
-                // También asegurar que el mes actual tenga estructura correcta
-                if (budgetsShared[currentMonth]['Taxis']) {
-                    delete budgetsShared[currentMonth]['Taxis'];
-                }
-                if (!budgetsAnto[currentMonth]['Taxis']) {
-                    budgetsAnto[currentMonth]['Taxis'] = 150;
-                }
-                if (!budgetsFer[currentMonth]['Taxis']) {
-                    budgetsFer[currentMonth]['Taxis'] = 150;
-                }
-                
-                // Agregar Supermercado al mes actual si no existe
-                if (!budgetsAnto[currentMonth]['Supermercado']) {
-                    budgetsAnto[currentMonth]['Supermercado'] = 200;
-                }
-                if (!budgetsFer[currentMonth]['Supermercado']) {
-                    budgetsFer[currentMonth]['Supermercado'] = 200;
-                }
-                
-                // Las correcciones (Taxis, Supermercado) se guardarán cuando el usuario edite presupuestos
+                if (budgetsShared[currentMonth]['Taxis']) delete budgetsShared[currentMonth]['Taxis'];
+                if (!budgetsAnto[currentMonth]['Taxis']) budgetsAnto[currentMonth]['Taxis'] = 150;
+                if (!budgetsFer[currentMonth]['Taxis']) budgetsFer[currentMonth]['Taxis'] = 150;
+                if (!budgetsAnto[currentMonth]['Supermercado']) budgetsAnto[currentMonth]['Supermercado'] = 200;
+                if (!budgetsFer[currentMonth]['Supermercado']) budgetsFer[currentMonth]['Supermercado'] = 200;
                 
                 populateMonthSelectors();
                 initBudgetMonthSelector();
@@ -838,6 +824,9 @@
                 renderBudgetEdits();
                 document.getElementById('expenseForm').addEventListener('submit', handleAddExpense);
                 setDefaultDate();
+            })
+            .catch(error => {
+                console.error('❌ Error cargando datos:', error);
             });
         }
         
@@ -847,7 +836,6 @@
                 return;
             }
             
-            // Si ya hay un guardado en progreso, marcar pendiente y salir
             if (isSavingToFirebase) {
                 pendingSave = true;
                 return;
@@ -857,17 +845,34 @@
             pendingSave = false;
             console.log('💾 Guardando en Firebase... (' + expenses.length + ' gastos)');
             
-            db.collection('users').doc(currentUser.uid).set({
-                expenses: expenses,
+            const userRef = db.collection('users').doc(currentUser.uid);
+            const batch = db.batch();
+            
+            // Guardar presupuestos en documento principal
+            batch.set(userRef, {
                 budgetsShared: budgetsShared,
                 budgetsAnto: budgetsAnto,
                 budgetsFer: budgetsFer,
                 lastUpdated: new Date()
-            }, {merge: true})
+            }, {merge: true});
+            
+            // Agrupar gastos por mes y guardar en subcollecciones
+            const expensesByMonth = {};
+            expenses.forEach(exp => {
+                const month = exp.month || 'unknown';
+                if (!expensesByMonth[month]) expensesByMonth[month] = [];
+                expensesByMonth[month].push(exp);
+            });
+            
+            Object.entries(expensesByMonth).forEach(([month, monthExpenses]) => {
+                const monthRef = userRef.collection('months').doc(month);
+                batch.set(monthRef, { expenses: monthExpenses });
+            });
+            
+            batch.commit()
             .then(() => {
                 console.log('✅ Datos guardados en Firebase');
                 isSavingToFirebase = false;
-                // Si quedó un guardado pendiente, ejecutarlo ahora
                 if (pendingSave) {
                     console.log('🔁 Ejecutando guardado pendiente...');
                     saveUserData();
@@ -876,9 +881,7 @@
             .catch((error) => {
                 console.error('❌ Error guardando en Firebase:', error);
                 isSavingToFirebase = false;
-                if (!error.message.includes('resource-exhausted')) {
-                    showError('Error guardando: ' + error.message);
-                }
+                showError('Error guardando: ' + error.message);
             });
         }
         
